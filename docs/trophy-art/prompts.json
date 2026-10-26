@@ -1,0 +1,127 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "intent": "Generate original transparent game-achievement artwork",
+  "basePrompt": "Use case: stylized-concept. Asset type: ONE premium video-game achievement collectible icon for a competition bracket website. Primary request: richly detailed, beautifully art-directed high-end 3D rendered award, worthy of a rare unlock in an immersive virtual world, with the wonder of Ready Player One. Original design. A mature, sophisticated game collectible, not a cartoon or low-poly icon. Square composition, isolated SINGLE centered object/group, large clean readable silhouette filling about 80% of the canvas, all parts fully in frame, roughly equal padding. Three-quarter product-render camera with excellent material detail, restrained magical lighting, clean edges. TRANSPARENT ALPHA background, absolutely no scenery, no backdrop, no opaque square, no painted checkerboard, no ground plane, no enclosing badge border. No text, typography, letters, watermark, logo, UI, conventional trophy cup, or generic pedestal. Keep the focal subject recognizable at 144 pixels. Render at 1024x1024. Subject: ",
+  "assets": [
+    {
+      "id": "dragon",
+      "name": "Dragonheart",
+      "category": "Fantasy",
+      "subject": "A magnificent unmistakable dragon achievement. A complete miniature midnight-blue dragon with two open bat-like wings, four clawed legs, curved horns, long tapering tail coiled around a floating luminous amethyst crystal. Regal alert head in three-quarter profile. Sculptural realistic anatomy, individually detailed scales, thin translucent teal wing membranes, touches of antique gold around the crystal. The full dragon silhouette must be obvious even at thumbnail size; dragon dominates, crystal secondary. Awe and ancient magic."
+    },
+    {
+      "id": "director",
+      "name": "Blockbuster",
+      "category": "Movies",
+      "subject": "An unmistakable ACTION MOVIE achievement: a beautifully crafted miniature film clapperboard in black titanium with a diagonal black-and-chrome striped clapstick, behind a dynamic forward-flying polished gold sports car stunt silhouette and a sculpted burst of orange fire sweeping upward. One coherent compact cinematic sculpture. The clapperboard and frozen-in-time car jump make this about action cinema, not real-world weaponry. Warm copper, gunmetal, energetic amber light. No guns, no text, no numbers, no badges, no logos."
+    },
+    {
+      "id": "donut",
+      "name": "Glazed glory",
+      "category": "Food",
+      "subject": "An immediately recognizable delicious strawberry-frosted ring DONUT, large and facing the viewer in a slight three-quarter tilt, clearly visible open hole. Real golden fried dough with fine pores, thick glossy pink icing drips, many colorful rod sprinkles. A delicate gold victory laurel curls around the lower edge without concealing the donut. A few suspended sugar crystals. Looks like an impossibly perfect collectible food achievement; mouthwatering first, magical second. Do not turn the donut into metal or a jewel. No plate, cup, pedestal, face or eyes."
+    },
+    {
+      "id": "wolf",
+      "name": "Moonlit guardian",
+      "category": "Animals",
+      "subject": "A noble realistic gray wolf standing and howling in three-quarter profile on a small naturally shaped granite outcrop with green moss and tiny alpine plants. Detailed gray and cream fur, strong correct wolf anatomy, ears upright and nose pointing up. The wolf's full body and four legs are visible; natural silhouette. A very thin crescent of pale moonlight arcs discreetly behind its shoulders. Nature and wilderness are the theme, not cybernetics or metal armor. Wolf is the main subject and occupies most of the artwork. Natural gray, pine green, cool moonlit silver."
+    },
+    {
+      "id": "crown",
+      "name": "Crown of the aether",
+      "category": "Fantasy",
+      "subject": "A floating open laurel crown of exquisitely sculpted antique gold leaves, like an ancient elven royal relic, gently spiraling upward around one radiant violet gemstone suspended in the open center. Realistically detailed delicate golden leaf veins, dew-like tiny crystals, elegant asymmetry, airy negative space. Fine strands of pale blue magical energy bind the wreath. Tall graceful magical achievement, 3D tangible materials, enchanting and ethereal. No crown-shaped cartoon, no plinth, no wide effects cloud. Antique gold, amethyst, pale ice-blue light."
+    },
+    {
+      "id": "crystal",
+      "name": "Heart of the rift",
+      "category": "Fantasy",
+      "subject": "A legendary large jagged amethyst crystal cluster floating with a few smaller satellite crystal shards. Complex physically convincing crystalline facets, clear translucent violet and icy blue refractions, a luminous core, a beautifully wrought thin antique gold armillary ring encircling the main cluster at an angle. Tiny gold filigree brackets, restrained glitter. A coveted magical RPG artifact with formidable dimensional depth and weight. Main crystal dominates. No generic flat diamond shape, no flat vector polygons, no base, no UI ring badge."
+    },
+    {
+      "id": "spellbook",
+      "name": "The astral codex",
+      "category": "Fantasy",
+      "subject": "An open ancient magical spellbook levitating at a graceful three-quarter angle, thick aged ivory pages visibly curving, richly embossed midnight-blue leather binding, intricate antique-gold cornerwork and clasps, a large luminous amethyst set in the spine. A small curling constellation of starlight hovers directly above the pages. Readable book silhouette with a few loose parchment leaves suspended beside it. Highly detailed tangible material, rare enchanted relic. Pages contain only tiny abstract illegible decorative marks, absolutely no readable text or letters. No background scene, no base."
+    },
+    {
+      "id": "sword",
+      "name": "Eclipse edge",
+      "category": "Fantasy",
+      "subject": "A single legendary enchanted longsword suspended vertically, tip pointing upward. Long translucent ice-blue crystal blade with an intricate glowing violet core, refined antique-gold crossguard shaped like two crescent wings, dark blue leather grip and amethyst pommel. A thin broken eclipse ring of gold and violet light floats behind the middle of the blade. Elegant powerful silhouette, close detailed craftsmanship, physically convincing crystal refraction and metal. The whole sword is visible with margin. No shield, pedestal, cartoon outline or broad smoke effects."
+    },
+    {
+      "id": "reel",
+      "name": "Silver-screen legend",
+      "category": "Movies",
+      "subject": "A prestigious cinematic achievement sculpture: an exquisitely machined polished silver 35mm film reel in three-quarter perspective, with recognizable circular reel holes and winding black film visible on the spool. A flowing ribbon of black photographic film with gold sprocket edges curls elegantly around the lower reel, like a dramatic film strip frozen in midair. Small art-deco gold accents, fine brushed metal details. Classic Hollywood, glamorous warm rim lighting and crisp silver reflections. One clear compact collectible silhouette; no lettering, no trophy base."
+    },
+    {
+      "id": "clapper",
+      "name": "Scene stealer",
+      "category": "Movies",
+      "subject": "A luxurious cinema drama achievement: two beautifully sculpted realistic theatrical masks, one serene laughing comedy face and one solemn tragic face, arranged as a single elegant dimensional award with a short curling strip of 35mm movie film weaving between them. One mask polished warm gold, one mask black obsidian with platinum rim. Mature human facial anatomy, elegant eyes and lips, exquisite cinematic sculptural craft, tasteful film festival glamour, slightly offset asymmetric composition. Film strip makes the connection to movies. No human body, no pedestal, no text, no cartoon faces."
+    },
+    {
+      "id": "popcorn",
+      "name": "Premiere night",
+      "category": "Movies",
+      "subject": "A beautifully rendered vintage cinema popcorn carton collectible. Deep burgundy lacquer carton with fine gold art-deco vertical trim, overflowing with highly realistic fluffy buttery popcorn kernels, a few kernels hovering just above the rim, a short loop of black 35mm film curling around the carton bottom. Rich velvet red, brushed gold, buttery ivory. Instantly recognizable movie-night popcorn, cinematic warm spotlight and restrained rim lighting. Mature high-end stylized 3D food-and-prop rendering, delightful collectible award. No writing or logos, no face, no trophy pedestal."
+    },
+    {
+      "id": "star",
+      "name": "Beyond the frame",
+      "category": "Movies",
+      "subject": "A sci-fi MOVIE achievement sculpture: a cinematic retro-futurist silver rocket with sleek swept fins soaring diagonally through a dimensional five-point gold film-star frame, with a short tightly contained luminous blue rocket exhaust plume. The lower arc of the gold star subtly becomes a perforated 35mm film strip. Collectible crafted silver and gold miniature with beautiful engraved panel lines, energetic silhouette and sophisticated blockbuster sci-fi styling. Clearly a rocket and golden movie star, not a realistic missile. One coherent object, all pieces visible. No wording, no insignia, no ground or pedestal."
+    },
+    {
+      "id": "pizza",
+      "name": "Slice supremacy",
+      "category": "Food",
+      "subject": "An unmistakable mouthwatering triangular slice of pepperoni pizza, broad golden brown puffy crust at the top and pointed tip down, tilted in three-quarter view to show real thickness. Stretchy melted mozzarella, five distinct glossy red pepperoni rounds, toasted cheese spots, two fresh basil leaves, crisp porous baked crust. A delicate small gold laurel follows the underside without hiding the food; two fine melting cheese strands hang from the tip. Warm natural food colors, appetizing realistic textures, high-end collectible game achievement. Food must look edible, never silver, metal, glass or gemstones. No face, plate, board, pedestal or busy effects."
+    },
+    {
+      "id": "burger",
+      "name": "Burger royalty",
+      "category": "Food",
+      "subject": "A single instantly recognizable gourmet CHEESEBURGER, intact and stacked together in a three-quarter hero view: glossy golden sesame bun, green ruffled lettuce, red tomato, melted yellow cheddar draped over a thick seared beef patty, lower toasted bun. Rich delicious physically realistic food textures. A small delicate gold laurel at the lower sides confers achievement status but does not cover any ingredients. Compact strong silhouette, appetizing natural colors, polished game reward render. Do not explode or separate the ingredients, do not render food in metal, no eyes, no face, no plate, trophy base or wrapper."
+    },
+    {
+      "id": "cupcake",
+      "name": "Sweet victory",
+      "category": "Food",
+      "subject": "One irresistible clearly recognizable CUPCAKE: golden vanilla cake in a beautifully fluted deep raspberry paper wrapper, tall luscious spiral of white vanilla buttercream with delicate pink highlights, a glossy red cherry with a curved stem on top, tiny gold sugar pearls. Real edible fluffy cream texture and cake crumbs, soft detailed studio-like lighting. A pair of small elegant golden laurel sprigs nestles under the cupcake, making it a collectible achievement. Mature realistic stylized 3D, natural appetizing color. Not metal or a crystal sculpture, no plate, cup, eyes, face or pedestal."
+    },
+    {
+      "id": "taco",
+      "name": "Taco triumph",
+      "category": "Food",
+      "subject": "One immediately recognizable classic crispy shell TACO shown in a clear three-quarter view: a golden folded U-shaped corn shell open along its top, generously stuffed with textured browned ground beef, shredded bright green lettuce, diced red tomatoes and grated yellow cheddar. Both sides of the crunchy shell visible, appetizing food proportions and realistic crisp blistered shell texture. A fresh small lime wedge and two tiny gold laurel sprigs tuck beside the lower edge. Coherent compact edible food achievement collectible, warm natural colors. Must unmistakably look like a taco, not a bowl or crescent jewel. No plate, wrapper, face, pedestal, gold metal food or effects hiding ingredients."
+    },
+    {
+      "id": "lion",
+      "name": "Savanna sovereign",
+      "category": "Animals",
+      "subject": "A majestic realistic male African lion seated upright on a small natural warm sandstone outcrop surrounded by a few tufts of dry savanna grass. Large beautifully detailed tawny mane with individual hairs, dignified calm face, amber eyes, muscular correct anatomy and visible front paws, tail curling naturally alongside. Warm sunrise rim light on its mane, sunlit ochre and earth colors. Nature-themed premium wildlife achievement, realistic animal materials, only a restrained dust-like sparkle. Lion dominates the icon, natural rock is a small support, no wide environment. No armor, gold metal animal, crown, jewelry, geometric facets, human expression, cartoon styling or rectangular pedestal."
+    },
+    {
+      "id": "fox",
+      "name": "Woodland wanderer",
+      "category": "Animals",
+      "subject": "A beautiful realistic red fox in a poised alert seated stance, three-quarter view, luxuriant orange-red fur, clear white chest and cheeks, black legs and ears, large bushy white-tipped tail curling naturally around its paws. Nestled on a tiny natural patch of forest moss with two fern fronds and a few autumn leaves. Correct fox anatomy and elegant narrow muzzle, thoughtful natural expression. Rich forest amber, russet, cream, moss green. A premium nature/wildlife game achievement, finely detailed believable fur and foliage, soft golden woodland rim light. No armor, jewels, metal animal, polygon facets, human smile, cartoon face or trophy base."
+    },
+    {
+      "id": "owl",
+      "name": "Forest oracle",
+      "category": "Animals",
+      "subject": "A magnificent realistic great horned owl with wings slightly spread in a calm landing pose on a short weathered oak branch wrapped in small green fern fronds and moss. Intricately layered brown, cream and charcoal feathers, recognizable ear tufts and warm amber eyes, realistic beak and talons grasping the branch. Natural symmetrical owl silhouette with wing tips fully in frame. Deep woodland warm browns and fern green, subtle moonlit edge highlights. Premium nature-themed wildlife achievement with exceptional feather detail. No metal, armor, jewels, geometric facets, human expression, cartoon eyes, floating space rings or generic pedestal."
+    },
+    {
+      "id": "shark",
+      "name": "Ocean apex",
+      "category": "Animals",
+      "subject": "A powerful realistic great white shark swimming in a dynamic graceful three-quarter curve, full body including all fins and tapering tail visible, blue-gray dorsal skin, bright white belly, natural small dark eyes and subtle gill detail. A tightly contained translucent ribbon of ocean water curves around its underside with a few clean suspended bubbles and a small natural coral-and-kelp flourish below. Shark dominates; compact sculptural nature-themed ocean achievement, anatomically believable, calm powerful rather than bloody or aggressive. Ocean teal, deep blue, pearl white, beautiful caustic highlights and skin detail. No metal animal, armor, polygon facets, cartoon face, encasing bubble, opaque water background or pedestal."
+    }
+  ]
+}

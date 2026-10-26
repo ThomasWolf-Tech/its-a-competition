@@ -1,0 +1,5 @@
+export const SHOWCASES = [
+  { id: "snacks", title: "The ultimate snack showdown", kicker: "Food & drink", first: "The ultimate", second: "snack showdown.", description: "Sweet. Salty. Seriously debatable. Sixteen snack-time favorites enter the bracket. Only one gets the last bite.", entrants: "16 favorites", initials: ["PC", "CH", "CK", "PZ"], tags: ["Popcorn", "Chips", "Cookies", "Pretzels"] },
+  { id: "movies", title: "The movie night hall of fame", kicker: "Movies & TV", first: "The movie night", second: "hall of fame.", description: "The rewatchables. The quotables. The one your friend won't stop talking about. Give movie night a winner.", entrants: "16 contenders", initials: ["SF", "AC", "CO", "AN"], tags: ["Sci-fi", "Action", "Comedy", "Animation"] },
+  { id: "games", title: "Game night gets competitive", kicker: "Games & good company", first: "Game night gets", second: "competitive.", description: "Cards on the table. Friendships on the line. Find out which game deserves a permanent seat at game night.", entrants: "16 contenders", initials: ["CG", "BG", "PG", "VG"], tags: ["Card games", "Board games", "Party games", "Video games"] },
+] as const;

@@ -1,0 +1,77 @@
+.builder-shell { max-width: 1240px; margin: 0 auto; padding: 34px 32px 80px; }
+.builder-back { color: var(--muted); font-size: 13px; text-decoration: none; }
+.builder-back:hover { color: var(--action); }
+.builder-heading { padding: 40px 0 36px; }
+.builder-heading h1 { font-size: clamp(32px, 4vw, 49px); line-height: 1.12; letter-spacing: -1.8px; margin: 16px 0; font-weight: 750; }
+.builder-heading h1 span { color: var(--action); }
+.builder-heading > p { color: var(--muted); font-size: 16px; margin: 0; }
+.builder-layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; align-items: start; gap: 28px; }
+.builder-sections { display: grid; gap: 22px; }
+.builder-section { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 28px; }
+.builder-sectionTitle { display: flex; align-items: center; gap: 14px; margin-bottom: 25px; }
+.builder-sectionTitle > span:first-child { color: var(--action); font-size: 12px; font-weight: 750; border: 1px solid var(--line); background: var(--surface-soft); border-radius: 8px; padding: 10px; }
+.builder-sectionTitle > div { flex: 1; }
+.builder-sectionTitle h2 { font-size: 19px; margin: 0 0 5px; letter-spacing: -.4px; }
+.builder-sectionTitle p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.5; }
+.builder-sectionTitle > svg { color: var(--muted); width: 23px; }
+.builder-field { min-width: 0; }
+.builder-field label { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 650; margin-bottom: 9px; }
+.builder-field label > span { color: var(--muted); font-size: 10px; font-weight: 400; }
+.builder-shell input, .builder-shell select { font: inherit; font-size: 14px; height: 47px; width: 100%; color: var(--text); border: 1px solid var(--line); border-radius: 8px; background: var(--background); padding: 0 13px; }
+.builder-shell input::placeholder { color: var(--muted); opacity: .8; }
+.builder-shell input:focus-visible, .builder-shell select:focus-visible, .builder-shell button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.builder-shell input[aria-invalid="true"] { border: 2px solid var(--champion); }
+.builder-fieldFoot { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; min-height: 17px; }
+.builder-fieldFoot > span:last-child { white-space: nowrap; }
+.builder-countRow { display: grid; grid-template-columns: 220px 1fr; align-items: end; gap: 20px; margin-top: 20px; }
+.builder-countRow p { color: var(--text); font-size: 12px; line-height: 1.8; margin: 0; }
+.builder-countRow p span { color: var(--muted); }
+.builder-progress { color: var(--action); font-size: 12px; font-variant-numeric: tabular-nums; }
+.builder-hint { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 0 0 18px; }
+.builder-hint:last-child { margin: 18px 0 0; }
+.builder-competitorGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; margin-top: 13px; }
+.builder-competitorField { position: relative; padding-bottom: 15px; }
+.builder-competitorField label { display: flex; align-items: center; gap: 8px; font-size: 11px; margin-bottom: 8px; color: var(--muted); }
+.builder-seed { color: var(--action); font-size: 10px; font-weight: 700; }
+.builder-counter { position: absolute; right: 2px; bottom: -2px; color: var(--muted); font-size: 10px; }
+.builder-categories { display: flex; gap: 7px; margin: 0 0 18px; flex-wrap: wrap; }
+.builder-categories button { flex: 1; cursor: pointer; padding: 10px 9px; background: var(--background); color: var(--muted); border: 1px solid var(--line); border-radius: 8px; font-size: 12px; }
+.builder-categories button span { margin-left: 8px; opacity: .65; font-size: 10px; }
+.builder-categories button[aria-pressed="true"] { color: var(--action); background: var(--selected); border-color: var(--action); }
+.builder-trophyGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.builder-trophyChoice { position: relative; display: flex; align-items: center; flex-direction: column; gap: 7px; padding: 14px 4px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--background); color: var(--text); cursor: pointer; transition: border-color .16s, background-color .16s; }
+.builder-trophyChoice img { width: 100%; max-width: 168px; height: 168px; object-fit: contain; }
+.builder-trophyChoice > span:last-child { font-size: 11px; line-height: 1.4; min-height: 28px; padding: 0 2px; }
+.builder-trophyChoice:hover { border-color: var(--action); background: var(--surface-soft); }
+.builder-trophyChoice[aria-pressed="true"] { border: 2px solid var(--action); background: var(--selected); padding: 13px 3px 11px; }
+.builder-check { position: absolute; right: 7px; top: 5px; color: var(--action); font-size: 11px; }
+.builder-summary { position: sticky; top: 105px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; overflow: hidden; }
+.builder-summaryTop { display: flex; justify-content: center; align-items: center; gap: 9px; color: var(--action); font-size: 10px; letter-spacing: 1.3px; }
+.builder-summaryTop svg { width: 15px; height: 15px; }
+.builder-summaryTrophy { position: relative; display: block; width: 176px; height: 176px; object-fit: contain; margin: 26px auto 8px; }
+.builder-prize { color: var(--champion); font-size: 11px; margin: 4px 0 14px; }
+.builder-summary h2 { font-size: 22px; line-height: 1.25; letter-spacing: -.5px; overflow-wrap: anywhere; margin: 0 auto 24px; }
+.builder-summaryStats { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.builder-summaryStats > div { display: flex; flex-direction: column; gap: 5px; }
+.builder-summaryStats strong { font-size: 22px; font-weight: 600; }
+.builder-summaryStats span { color: var(--muted); font-size: 10px; }
+.builder-readiness { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 11px; padding: 22px 0; }
+.builder-readiness svg { width: 15px; height: 15px; color: var(--action); flex-shrink: 0; }
+.builder-submit { width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 8px; background: var(--action); color: var(--on-action); padding: 15px 10px; font-size: 13px; font-weight: 750; cursor: pointer; }
+.builder-submit:hover { filter: brightness(1.08); }
+.builder-submit svg { width: 18px; height: 18px; }
+.builder-localNote { color: var(--muted); font-size: 10px; line-height: 1.8; margin: 15px 0 0; }
+.builder-error { color: var(--champion); font-size: 12px; line-height: 1.5; }
+.builder-miniBracket { position: absolute; top: 105px; left: 22px; right: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 100px; opacity: .4; }
+.builder-miniBracket span { height: 21px; border: 1px solid var(--line); border-radius: 4px; }
+.builder-miniBracket span:nth-child(odd)::after { content: ""; display: block; width: 24px; height: 32px; border: solid var(--line); border-width: 1px 1px 0 0; position: relative; left: 100%; top: 9px; }
+.builder-miniBracket span:nth-child(even)::after { content: ""; display: block; width: 24px; height: 32px; border: solid var(--line); border-width: 1px 0 0 1px; position: relative; left: -24px; top: 9px; }
+@media(max-width: 1050px) { .builder-layout { grid-template-columns: minmax(0, 1fr) 265px; gap: 20px; } .builder-section { padding: 22px; } .builder-trophyGrid { grid-template-columns: repeat(3, minmax(0,1fr)); } .builder-countRow { grid-template-columns: 1fr; gap: 12px; } }
+@media(max-width: 760px) { .builder-shell { padding: 25px 20px 50px; } .builder-heading { padding: 30px 0; } .builder-layout { grid-template-columns: 1fr; } .builder-summary { position: relative; top: 0; } .builder-summaryTrophy { margin-top: 16px; } .builder-summary h2 { max-width: 300px; } .builder-summaryStats, .builder-submit { max-width: 360px; margin: 0 auto; } .builder-section { padding: 21px 18px; } .builder-sectionTitle { gap: 10px; } .builder-sectionTitle h2 { font-size: 17px; } .builder-sectionTitle p { font-size: 11px; } .builder-competitorGrid { column-gap: 12px; } .builder-categories button { padding: 10px 6px; } .builder-categories button span { display: none; } .builder-trophyGrid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media(prefers-reduced-motion: reduce) { .builder-trophyChoice { transition: none; } }
+
+@media(max-width: 480px) { .builder-trophyGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.builder-trophyLabel { display: grid; gap: 5px; }
+.builder-trophyLabel strong { font-weight: 600; }
+.builder-trophyLabel small { color: var(--muted); font-size: 10px; }
