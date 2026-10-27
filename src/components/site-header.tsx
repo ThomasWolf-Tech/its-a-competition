@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/icon";
+import BrandMark from "@/components/brand-mark";
 import { SHOWCASES } from "@/lib/showcases";
 
 export default function SiteHeader() {
@@ -14,12 +15,12 @@ export default function SiteHeader() {
   useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
   useEffect(() => { if (modal) dialog.current?.showModal(); }, [modal]);
   function open(which: Exclude<typeof modal, null>) { setModal(which); }
-  const results = SHOWCASES.filter((item) => `${item.title} ${item.kicker} ${item.tags.join(" ")}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const results = SHOWCASES.filter((item) => `${item.title} ${item.kicker} ${item.description} ${item.creator} ${item.tags.join(" ")}`.toLowerCase().includes(query.trim().toLowerCase()));
   return <>
     <a href="#main-content" className="skip-link">Skip to content</a>
     <header className="main-header">
       <div className="nav-inner">
-        <Link href="/" className="wordmark" aria-label="It's a Competition home"><span className="logo-holder"><Icon name="bracket" /></span><span>it’s a<br /><strong>competition<span className="brand-period">.</span></strong></span></Link>
+        <Link href="/" className="wordmark" aria-label="It's a Competition home"><BrandMark /><span>it’s a<br /><strong>competition<span className="brand-period">.</span></strong></span></Link>
         <form className="nav-search" role="search" onSubmit={(event) => { event.preventDefault(); open("search"); }}>
           <Icon name="search" /><input ref={search} aria-label="Search demo brackets" placeholder="Find your next rivalry..." value={query} onChange={(event) => setQuery(event.target.value)} />
           <button type="submit" aria-label="Search brackets"><Icon name="arrow" /></button>

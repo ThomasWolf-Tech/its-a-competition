@@ -11,7 +11,7 @@ const paths = {
   close: "m6 6 12 12M6 18 18 6",
   moon: "M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z",
   sun: "M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z",
-  bracket: "M3 3v6h5m-5 6v6h5M8 6v12h5m0-6h8M21 3v6h-5m5 6v6h-5m0-15v12h-3",
+  bracket: "M3 3h5v6H3M3 15h5v6H3M8 6h7v12H8M15 12h6",
   spark: "m12 3 2.3 6.7L21 12l-6.7 2.3L12 21l-2.3-6.7L3 12l6.7-2.3L12 3Z",
   check: "m5 12 4 4L19 6",
   pause: "M8 5v14M16 5v14",

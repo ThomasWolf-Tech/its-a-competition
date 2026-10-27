@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in background extraction",
+  "source": "03-rally-relic-v2.png",
+  "output": "public/brand/rally-relic.png",
+  "prompt": "Use case: background-extraction. Edit target: the supplied approved Rally Relic logo. Make a web-ready transparent-background cutout of this EXACT artwork. Remove ONLY the exterior navy background and empty space between separate exterior parts. Preserve every logo element, shape, proportion, color, position and angle: both blue tournament brackets and ALL of their branches are LOCKED and must remain exactly as drawn; preserve the white game controller, yellow basketball, accurate circular five-opening film reel and attached film with frames and edge sprockets, curved trophy handles and yellow donut base. Keep the dark navy ink, outlines and details INSIDE the artwork, including controller D-pad/buttons and film-strip frame divisions, so they remain visible on light backgrounds. Preserve the existing anti-aliased clean edges. Do not redesign, simplify, add or delete any component. Keep the full mark centered, with the entire brackets and donut base visible and a modest clear margin. True alpha transparency outside the logo, not a checkerboard, not white or navy. No text, no additional decoration."
+}

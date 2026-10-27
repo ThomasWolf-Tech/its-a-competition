@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "input": "/Users/wolf/Code/brack-it/public/trophies/achievements/pizza.png",
+  "output": "public/trophies/achievements/pizza-no-leaves.png",
+  "prompt": "Use case: precise-object-edit. Surgical retouch of this exact transparent pepperoni-pizza trophy. Remove ONLY TWO large green basil leaves sitting on the pizza: one upper-middle leaf between the top pepperoni slices, and one middle-right leaf beside the central pepperoni. Replace only the tiny leaf-covered regions with matching melted cheese and toasted-cheese texture seamlessly continuing their immediate surroundings. Preserve the pizza's exact silhouette, camera angle, composition, seed-like herb speckles, all pepperoni slices and their precise locations/sizes, all crust details, cheese texture, dangling cheese strands, lighting and colors. Preserve EVERY gold laurel leaf on both sides and the bottom, their shapes and highlights. Do NOT remove or alter the gold laurels, do NOT alter the little dried herb flecks, do NOT add new toppings, do NOT redesign or re-render the trophy. Everything outside the two green basil-leaf regions must stay exactly as in the input. Preserve original resolution/framing and true alpha transparency. No background, no text, no watermark."
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/site-header";
 import Icon from "@/components/icon";
+import BrandMark from "@/components/brand-mark";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
-  return <html lang="en" data-theme="dark" data-scroll-behavior="smooth"><body><SiteHeader />{children}<footer className="main-footer"><Link href="/" className="footer-brand"><Icon name="bracket" /> it’s a competition.</Link><span>Big opinions. Good company.</span><Link href="/bracket">Try the bracket demo <Icon name="arrow" /></Link></footer></body></html>;
+  return <html lang="en" data-theme="dark" data-scroll-behavior="smooth"><body><SiteHeader />{children}<footer className="main-footer"><Link href="/" className="footer-brand"><BrandMark footer /> it’s a competition.</Link><span>Big opinions. Good company.</span><Link href="/bracket">Try the bracket demo <Icon name="arrow" /></Link></footer></body></html>;
 }

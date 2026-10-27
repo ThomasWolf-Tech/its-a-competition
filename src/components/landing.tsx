@@ -3,7 +3,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
 import Icon from "@/components/icon";
-import { SHOWCASES } from "@/lib/showcases";
+import { SHOWCASES, customShowcase, type Showcase } from "@/lib/showcases";
+import { useBracketConfig } from "@/lib/use-bracket-config";
+import { useBracketProgress } from "@/lib/use-bracket-progress";
+import { currentMatchup } from "@/lib/bracket-progress";
+import { roundNames } from "@/lib/bracket";
+import { spotlightTitle } from "@/lib/spotlight-title";
 
 function subscribeMotion(listener: () => void) {
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -29,6 +34,28 @@ function BracketBackdrop() {
   </div>;
 }
 
+function SpotlightSlide({ slide, active, random }: { slide: Showcase; active: boolean; random: number }) {
+  const { state } = useBracketProgress(slide.id, slide.competitors);
+  const match = currentMatchup(state, random);
+  const rounds = roundNames(slide.competitors.length);
+  const complete = state.round === rounds.length;
+  const champion = complete ? slide.competitors.find(competitor => competitor.id === state.winners[`${rounds.length - 1}-0`]) : null;
+  const voteCount = Object.keys(state.picks).length + slide.votes;
+  const title = spotlightTitle(slide.title);
+  return <div className={`hero-slide${active ? " is-active" : ""}`} inert={!active} aria-hidden={!active} role="group" aria-roledescription="slide" aria-label={slide.title}>
+    <div className="hero-copy"><span className="hero-category">{slide.kicker}</span><h1 className={`hero-title${slide.title.length > 42 ? " hero-title-long" : ""}`}>{title.leading}<span>{title.accent}</span></h1>
+      <div className="hero-creator"><span className="creator-avatar" aria-hidden="true">{slide.creator.slice(0, 2).toUpperCase()}</span><span>Created by <strong>{slide.creator === "You" ? "you" : `@${slide.creator}`}</strong></span>{slide.id === "custom" && <span className="local-feature-label">Your local preview</span>}</div>
+      {slide.description && <p className="hero-description">{slide.description}</p>}
+      <div className="hero-metrics"><span><Icon name="bracket" /> {slide.competitors.length} contenders</span><span><Icon name="flame" /> <strong>{voteCount.toLocaleString("en-US")}</strong> {slide.id === "custom" ? "your picks" : "demo votes cast"}</span></div>
+      <div className="hero-cta"><Link href={slide.href} className="primary-button">{complete ? "See the winner" : "Make a pick"} <Icon name="arrow" /></Link></div>
+    </div>
+    <div className="match-teaser" aria-label={match ? `Current matchup: ${match.competitors.map(competitor => competitor?.name).join(" versus ")}` : "Bracket winner"}>
+      <span className="teaser-label">{complete ? "THE SCORE IS SETTLED" : `Round ${state.round + 1} of ${slide.competitors.length} · MATCHUP`}</span>
+      {match ? <>{match.competitors.map((competitor, index) => competitor && <div className="teaser-contender" key={competitor.id}>{index === 1 && <span className="teaser-vs">VS</span>}<div className="teaser-team"><span>{competitor.initials}</span><strong>{competitor.name}</strong></div></div>)}</> : champion && <div className="teaser-team teaser-champion"><Icon name="trophy" /><strong>{champion.name}</strong></div>}
+    </div>
+  </div>;
+}
+
 export default function Landing() {
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(true);
@@ -38,8 +65,15 @@ export default function Landing() {
   const hero = useRef<HTMLDivElement>(null);
   const strike = useRef<HTMLDivElement>(null);
   const touchStart = useRef<number | null>(null);
-  const slide = SHOWCASES[active];
-  function move(direction: number) { setActive(index => (index + direction + SHOWCASES.length) % SHOWCASES.length); }
+  const { config } = useBracketConfig();
+  const slides = config ? [...SHOWCASES, customShowcase(config)] : SHOWCASES;
+  const [matchSeed, setMatchSeed] = useState(0);
+  // Randomize after hydration and on slide changes, without server/client mismatch.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMatchSeed(Math.random()));
+    return () => cancelAnimationFrame(frame);
+  }, [active]);
+  function move(direction: number) { setActive(index => (index + direction + slides.length) % slides.length); }
   const rotating = playing && !hovered && !focused && !reducedMotion;
   useEffect(() => {
     if (!rotating) return;
@@ -47,13 +81,13 @@ export default function Landing() {
     let visible = false;
     function schedule() {
       clearTimeout(timer);
-      if (visible && !document.hidden) timer = setTimeout(() => setActive(index => (index + 1) % SHOWCASES.length), 6500);
+      if (visible && !document.hidden) timer = setTimeout(() => setActive(index => (index + 1) % slides.length), 6500);
     }
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; schedule(); }, { threshold: 0.25 });
     if (hero.current) observer.observe(hero.current);
     document.addEventListener("visibilitychange", schedule);
     return () => { clearTimeout(timer); observer.disconnect(); document.removeEventListener("visibilitychange", schedule); };
-  }, [active, rotating]);
+  }, [active, rotating, slides.length]);
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
@@ -80,30 +114,19 @@ export default function Landing() {
   }, []);
   return <main id="main-content" className="landing-main">
     <section id="trending" className="featured-section" aria-labelledby="featured-heading">
-      <div ref={hero} className="feature-carousel" role="region" aria-roledescription="carousel" aria-label="Featured bracket concepts"
+      <div ref={hero} className="feature-carousel" role="region" aria-roledescription="carousel" aria-label="Featured brackets"
         onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
         onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setFocused(false); }}
         onKeyDown={(event) => { if (event.key === "ArrowRight") { event.preventDefault(); move(1); } if (event.key === "ArrowLeft") { event.preventDefault(); move(-1); } }}
         onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={(event) => { if (touchStart.current !== null) { const delta = touchStart.current - event.changedTouches[0].clientX; if (Math.abs(delta) > 60) move(delta > 0 ? 1 : -1); } touchStart.current = null; }}>
         <BracketBackdrop />
-        <div className="hero-topline"><span className="featured-label"><Icon name="spark" /> IN THE SPOTLIGHT</span><span className="concept-label">Sample bracket · Preview</span></div>
-        <div className="hero-stage"><div className="hero-slide" key={slide.id} role="group" aria-live={rotating ? "off" : "polite"} aria-atomic="true" aria-roledescription="slide" aria-label={`${active + 1} of ${SHOWCASES.length}: ${slide.title}`}>
-          <div className="hero-copy"><span className="hero-category">{slide.kicker}</span><h1 id="featured-heading">{slide.first}<br /><span>{slide.second}</span></h1><p>{slide.description}</p>
-            <div className="hero-cta"><Link href="/bracket" className="primary-button">Try a bracket <Icon name="arrow" /></Link><span><Icon name="bracket" /> {slide.entrants}<span className="hero-meta-dot">·</span>One winner</span></div>
-          </div>
-          <div className="match-teaser" aria-hidden="true">
-            <span className="teaser-label">THE MATCHUP</span>
-            <div className="teaser-team"><span>{slide.initials[0]}</span><strong>{slide.tags[0]}</strong><i /></div>
-            <span className="teaser-vs">VS</span>
-            <div className="teaser-team"><span>{slide.initials[1]}</span><strong>{slide.tags[1]}</strong><i /></div>
-            <div className="teaser-crown"><Icon name="trophy" /><span>Bragging rights<br /><strong>up for grabs.</strong></span></div>
-          </div>
-        </div></div>
-        <div className="carousel-bottom"><div className="carousel-dots" aria-label="Choose featured bracket">{SHOWCASES.map((item, index) => <button type="button" key={item.id} className={index === active ? "active" : ""} aria-label={`Show ${item.title}`} aria-pressed={index === active} onClick={() => setActive(index)}><span /></button>)}</div>
+        <div className="hero-topline"><span id="featured-heading" className="featured-label"><Icon name="spark" /> IN THE SPOTLIGHT</span></div>
+        <div className="hero-stage" aria-live={rotating ? "off" : "polite"}>{slides.map((slide, index) => <SpotlightSlide key={slide.id} slide={slide} active={index === active} random={matchSeed} />)}</div>
+        <div className="carousel-bottom"><div className="carousel-dots" aria-label="Choose featured bracket">{slides.map((item, index) => <button type="button" key={item.id} className={index === active ? "active" : ""} aria-label={`Show ${item.title}`} aria-pressed={index === active} onClick={() => setActive(index)}><span /></button>)}</div>
           <a href="#about" className="scroll-invitation">What’s this all about? <Icon name="arrow" /></a>
-          <div className="carousel-controls"><span className="slide-count"><strong>0{active + 1}</strong> / 0{SHOWCASES.length}</span><button type="button" className="carousel-arrow autoplay-toggle" disabled={reducedMotion} aria-label={reducedMotion ? "Auto-rotation disabled for reduced motion" : playing ? "Pause automatic slide rotation" : "Start automatic slide rotation"} onClick={() => setPlaying(value => !value)}><Icon name={playing && !reducedMotion ? "pause" : "play"} /></button><button type="button" className="carousel-arrow previous" aria-label="Previous featured bracket" onClick={() => move(-1)}><Icon name="arrow" /></button><button type="button" className="carousel-arrow" aria-label="Next featured bracket" onClick={() => move(1)}><Icon name="arrow" /></button></div></div>
+          <div className="carousel-controls"><span className="slide-count"><strong>0{active + 1}</strong> / 0{slides.length}</span><button type="button" className="carousel-arrow autoplay-toggle" disabled={reducedMotion} aria-label={reducedMotion ? "Auto-rotation disabled for reduced motion" : playing ? "Pause automatic slide rotation" : "Start automatic slide rotation"} onClick={() => setPlaying(value => !value)}><Icon name={playing && !reducedMotion ? "pause" : "play"} /></button><button type="button" className="carousel-arrow previous" aria-label="Previous featured bracket" onClick={() => move(-1)}><Icon name="arrow" /></button><button type="button" className="carousel-arrow" aria-label="Next featured bracket" onClick={() => move(1)}><Icon name="arrow" /></button></div></div>
       </div>
-      <div className="featured-caption"><span><span className="caption-square" /> A taste of what’s coming.</span><span>Featured concepts for now. Community trends come next.</span></div>
+      <div className="featured-caption"><span><span className="caption-square" /> A taste of what’s coming.</span><span>Demo creators and vote totals. Your saved bracket appears here as a local preview.</span></div>
     </section>
 
     <section id="about" className="about-section" aria-labelledby="about-heading">

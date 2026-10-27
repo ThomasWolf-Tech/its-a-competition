@@ -1,0 +1,7 @@
+{
+  "tool": "image_gen.imagegen",
+  "mode": "built-in edit",
+  "input": "/Users/wolf/Code/brack-it/public/brand/rally-relic.png",
+  "output": "public/brand/rally-relic-color.png",
+  "prompt": "Use case: precise-object-edit. Edit this EXACT approved transparent website logo. Make ONLY small color accents on the game controller and circular movie reel. Controller: keep its large body chalk white, change the D-pad to the existing electric sky blue, and give its four circular face buttons a restrained mix of the existing sky blue and energy yellow. Retain the two tiny center buttons in navy. Film reel: keep the five-hole reel face primarily chalk/silver, add the existing sky blue to its thin outer rim and a small energy-yellow accent to the center spindle/hub. Do not recolor the film strip. LOCK EVERYTHING ELSE: both tournament brackets and ALL their branches, sizes, endpoints, widths, angles and colors; basketball; film strip and sprocket holes; curved handles; trophy stem; donut with icing and sprinkles; navy outlines; full composition and canvas framing. No geometrical changes, no moving or resizing parts, no new objects. User asked for just a bit of extra color, not a redesign. Match original rendering and preserve true alpha transparency outside the logo."
+}

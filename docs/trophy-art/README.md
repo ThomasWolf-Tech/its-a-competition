@@ -14,3 +14,5 @@ The matte website controls remain part of the established site theme. Richer mat
 These are raster illustrations, not SVGs or 3D models. Next.js Image serves resized optimized variants. Original generated PNGs retain their alpha channel and are copied into the project; no external image hosting is required.
 
 Trophy animation is future work. Whole-object motion can use transforms; independently moving wings, rings, particles or materials will need layered assets or a later 3D implementation. Respect reduced-motion preferences. The older `*-relic.svg` files and `scripts/render-trophies.py` belong to the retired vector pass and do not generate the active collection.
+
+Pizza retouch: only the two large green basil leaves were removed; the pizza and gold laurels retain the selected design. The active file is `public/trophies/achievements/pizza-no-leaves.png`; the exact built-in edit prompt is in [pizza-correction.json](./pizza-correction.json).

@@ -81,7 +81,7 @@ export const TROPHIES = [
     "name": "Slice supremacy",
     "category": "Food",
     "subjectLabel": "Pepperoni pizza",
-    "src": "/trophies/achievements/pizza.png"
+    "src": "/trophies/achievements/pizza-no-leaves.png"
   },
   {
     "id": "burger",

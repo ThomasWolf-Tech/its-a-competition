@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useReducer, type Dispatch, type CSSProperties } from "react";
-import { bracketReducer, canAdvance, COMPETITORS, getMatchups, initialBracket, roundNames, bracketSize,
+import { type Dispatch, type CSSProperties } from "react";
+import { canAdvance, COMPETITORS, getMatchups, roundNames, bracketSize,
   type BracketAction, type BracketState, type Competitor, type Matchup } from "@/lib/bracket";
 import { getTrophy } from "@/lib/trophies";
+import { useBracketProgress } from "@/lib/use-bracket-progress";
+import Icon from "@/components/icon";
 
 export function Trophy({ className = "" }: { className?: string }) {
   return <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -62,8 +64,8 @@ function Connectors({ round, rounds, width, height }: { round: number; rounds: n
   </svg>;
 }
 
-export default function BracketDemo({ competitors = COMPETITORS, title, trophyId = "crown" }: { competitors?: Competitor[]; title?: string; trophyId?: string }) {
-  const [state, dispatch] = useReducer(bracketReducer, competitors, initialBracket);
+export default function BracketDemo({ competitors = COMPETITORS, title, trophyId = "crown", description, category, progressId = "demo" }: { competitors?: Competitor[]; title?: string; trophyId?: string; description?: string; category?: string; progressId?: string }) {
+  const { state, dispatch } = useBracketProgress(progressId, competitors);
   const names = roundNames(competitors.length);
   const rounds = names.length;
   const final = rounds - 1;
@@ -81,7 +83,8 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
     <section className="competition-heading" aria-labelledby="competition-title">
       <div><div className="eyebrow"><span className="eyebrow-line" /> {title ? "YOUR SHOWDOWN" : "THE FIRST SHOWDOWN"} <span className="demo-pill">LOCAL PREVIEW</span></div>
         <h1 id="competition-title">{title ?? <>Sixteen teams.<br className="mobile-break" /> <span>One crown.</span></>}</h1>
-        <p>A little friendly competition. A lot of bragging rights.</p></div>
+        {category && <span className="bracket-category">{category}</span>}
+        <p>{description || "A little friendly competition. A lot of bragging rights."}</p></div>
       <div className="competition-stats" aria-label="Tournament format">
         <div><strong>{competitors.length}</strong><span>COMPETITORS</span></div><span className="stat-divider" />
         <div><strong>{rounds}</strong><span>ROUNDS</span></div><span className="stat-divider" />
@@ -90,7 +93,7 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
     </section>
     <section className="tournament" aria-label={`${competitors.length}-competitor competition bracket`}>
       <div className="tournament-toolbar">
-        <div className="bracket-tab"><span className="bracket-small" aria-hidden="true">⑂</span> The bracket <span className="format-pill">Single elimination</span></div>
+        <div className="bracket-tab"><Icon name="bracket" className="bracket-small" /> The bracket <span className="format-pill">Single elimination</span></div>
         <div className="legend"><span className="legend-dot" /> {complete ? "Competition complete" : "Pick a competitor to vote"}</div>
       </div>
       <div className="round-progress" aria-label="Round progress">
@@ -133,6 +136,6 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
         </div>
       </div>
     </section>
-    <div className="demo-note"><span aria-hidden="true">ⓘ</span> {title ? "Your bracket setup is saved in this tab. This is a local preview, not a published competition." : "A practice bracket with fictional teams."} Your picks reset on refresh.</div>
+    <div className="demo-note"><span aria-hidden="true">ⓘ</span> {title ? "A local preview, not a published competition." : "A practice bracket with fictional teams."} Picks and round progress stay in this browser tab. Reset to play again.</div>
   </>;
 }
