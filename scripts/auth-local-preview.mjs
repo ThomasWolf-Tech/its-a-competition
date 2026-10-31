@@ -1,0 +1,11 @@
+import { spawn, spawnSync } from 'node:child_process';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const result = spawnSync(path.join(root, 'node_modules/.bin/supabase'), ['status', '--output-format', 'json'], { cwd: root, env: { ...process.env, SUPABASE_HOME: path.join(root, '.supabase-local'), SUPABASE_EXPERIMENTAL_STACK: '1' }, encoding: 'utf8' });
+if (result.status !== 0) throw new Error('Run npm run db:start first.');
+const local = JSON.parse(result.stdout).env;
+if (!['127.0.0.1', 'localhost'].includes(new URL(local.API_URL).hostname)) throw new Error('Local preview accepts only loopback Supabase.');
+const child = spawn(path.join(root, 'node_modules/.bin/next'), ['dev', '--port', '3001', '--hostname', '127.0.0.1'], { cwd: root, env: { ...process.env, BRACKET_TEST_DIST_DIR: '.next-auth-test', NEXT_PUBLIC_SUPABASE_URL: local.API_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: local.PUBLISHABLE_KEY, NEXT_PUBLIC_SITE_URL: 'http://127.0.0.1:3001' }, stdio: 'inherit' });
+for (const signal of ['SIGINT', 'SIGTERM']) process.on(signal, () => child.kill(signal));
+child.on('exit', code => { process.exitCode = code ?? 0; });

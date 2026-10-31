@@ -1,0 +1,17 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "scope": "User clarified: rework all basketball linework, keeping everything else in the logo unchanged.",
+  "edit_target": "Bracket-free trophy, preserved as public/brand/rally-relic-color.png and public/brand/rally-relic-trophy.png",
+  "references": [
+    "https://www.wilson.com/en-us/products/evolution-game-basketball-wz10012",
+    "https://www.wilson.com/cdn/shop/files/WTB0516__0_7_Evolution_BSKT_BR_png_orangeBlack_01.png?v=1789764274&width=1200",
+    "https://www.wilson.com/cdn/shop/files/WTB0516__3_7_Evolution_BSKT_BR_png_orangeBlack_08.png?v=1789764274&width=3840"
+  ],
+  "prompt": "Image 1 is the EDIT TARGET: the transparent navy/blue/yellow trophy logo. Images 2 and 3 are real basketball REFERENCE PHOTOS for seam topology only. Rework ALL of the dark navy/black seam linework on the YELLOW BASKETBALL behind the controller and movie reel. The existing seams are malformed and incoherent. Replace the entire internal basketball seam pattern with a recognizable anatomically correct basketball pattern modeled on image 2: one continuous center meridian crossing one continuous equatorial channel, with two smoothly curved opposing side channels wrapping around the ball. Adapt their angle and foreshortening to the basketball in the trophy, with consistent dark navy stroke thickness matching the logo. Every visible seam must meet the ball edge or continue naturally behind an overlapping object. Clean intersections; no unexplained branches, disconnected stubs, angular random wedges, or leftover old seams. Do not merely extend one old line: redraw ALL basketball seam linework coherently. Preserve the basketball's current yellow/gold color, texture, outer silhouette, size, position and occlusion by the controller and reel. Do not turn it orange, do not add any Wilson text, other brand name, pebble photo texture, extra basketball, or new objects. CRITICAL: absolutely everything OUTSIDE the basketball stays IDENTICAL to image 1: controller silhouette and every button, curved blue trophy handles, movie reel and perforated film strip, stem, donut frosting/sprinkles and oval base. Keep the tournament background brackets absent. Same exact 1254x1254 canvas and alignment, genuine transparent background. This edit is confined to the basketball only.",
+  "reference_output": "basketball-linework-reference.png",
+  "final_preparation": "scripts/prepare-basketball-logo.mjs composites only the basketball face from the generated edit onto the original bracket-free trophy. All pixels outside the basketball mask are byte-identical to the original, and all alpha pixels are unchanged. The original controller, handles, reel/film, stem and donut/base are retained.",
+  "pixels_changed_outside_basketball": 0,
+  "alpha_pixels_changed": 0,
+  "website_asset": "public/brand/rally-relic-trophy-v2.png",
+  "browser_icon": "src/app/icon.png"
+}

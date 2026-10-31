@@ -6,6 +6,8 @@ const paths = {
   plus: "M12 5v14M5 12h14",
   flame: "M12 3c2 5 6 6 6 11a6 6 0 1 1-12 0c0-2 1-4 3-6 0 3 1 4 2 4 2-3 1-5 1-9Z",
   user: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 21v-2a8 8 0 0 1 16 0v2",
+  userCheck: "M14 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM2 21v-2a8 8 0 0 1 12-6.9M16 18l2 2 4-5",
+  logout: "M9 5H4v14h5M12 12h9m-4-4 4 4-4 4",
   arrow: "M4 12h16m-6-6 6 6-6 6",
   chevron: "m9 5 7 7-7 7",
   close: "m6 6 12 12M6 18 18 6",
@@ -16,6 +18,11 @@ const paths = {
   check: "m5 12 4 4L19 6",
   pause: "M8 5v14M16 5v14",
   play: "m8 4 12 8-12 8V4Z",
+  lock: "M6 11h12v10H6V11Zm3 0V7a3 3 0 0 1 6 0v4M12 15v2",
+  globe: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c4 5 4 13 0 18-4-5-4-13 0-18Z",
+  clock: "M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM12 7v5l3 2",
+  calendar: "M4 5h16v16H4V5ZM8 3v4m8-4v4M4 10h16",
+  rules: "M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1m0-15c3-2 6-2 9-1v15c-3-1-6-1-9 1V5Z",
 } as const;
 
 export type IconName = keyof typeof paths;

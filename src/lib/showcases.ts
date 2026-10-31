@@ -1,6 +1,11 @@
 import { configCompetitors, type BracketConfig } from "./bracket-config";
 import type { Competitor } from "./bracket";
 import { categoryName, type BracketCategory } from "./bracket-categories";
+import { customProgressId } from "./bracket-schedule";
+
+// Future trending data refreshes on page load/reload, with no live subscription.
+// Current demo slides remain examples until real trending discovery is connected.
+export const MAX_TRENDING_CAROUSEL_BRACKETS = 10;
 
 const concepts = [
   { id: "snacks", title: "The ultimate snack showdown", category: "food-drink", description: "Sweet. Salty. Seriously debatable. Sixteen snack-time favorites enter the bracket. Only one gets the last bite.", creator: "SnackCouncil", votes: 2847, trophyId: "donut", names: ["Popcorn", "Chips", "Cookies", "Pretzels", "Nachos", "Brownies", "Ice cream", "Donuts", "Trail mix", "Gummy bears", "Crackers", "Chocolate", "Granola bars", "Fruit snacks", "Cheese puffs", "Cupcakes"] },
@@ -13,13 +18,13 @@ export const SHOWCASES = concepts.map(item => ({
   initials: configCompetitors(item).map(competitor => competitor.initials),
   competitors: configCompetitors(item), href: `/bracket?showcase=${item.id}`,
 }));
-export type Showcase = BracketConfig & { id: string; category: BracketCategory; description: string; creator: string; votes: number; kicker: string; tags: string[]; initials: string[]; competitors: Competitor[]; href: string };
+export type Showcase = BracketConfig & { id: string; progressId?: string; category: BracketCategory; description: string; creator: string; votes: number; kicker: string; tags: string[]; initials: string[]; competitors: Competitor[]; href: string };
 
 export function customShowcase(config: BracketConfig): Showcase {
   const competitors = configCompetitors(config);
   return {
     ...config, description: config.description ?? "",
-    id: "custom", category: config.category ?? "everything-else",
+    id: "custom", progressId: customProgressId(config), category: config.category ?? "everything-else",
     creator: "You", votes: 0, kicker: categoryName(config.category), tags: config.names,
     initials: competitors.map(competitor => competitor.initials), competitors, href: "/bracket/custom",
   };

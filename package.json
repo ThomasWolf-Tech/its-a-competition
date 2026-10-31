@@ -7,9 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test src/lib/*.test.mjs"
+    "test": "node --test src/lib/*.test.mjs",
+    "db:start": "node scripts/supabase-local.mjs start",
+    "db:stop": "node scripts/supabase-local.mjs stop",
+    "db:migrate": "node scripts/supabase-local.mjs migrate",
+    "db:test": "node scripts/supabase-local.mjs test && node scripts/test-draft-concurrency.mjs",
+    "db:types": "node scripts/supabase-local.mjs types",
+    "db:advisors": "node scripts/supabase-local.mjs advisors",
+    "auth:preview": "node scripts/auth-local-preview.mjs",
+    "auth:test": "node scripts/test-auth-local.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0"
@@ -21,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "supabase": "2.122.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

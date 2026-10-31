@@ -1,0 +1,10 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set local search_path=public,extensions,pg_catalog;
+select plan(4);
+select is((select schedule from cron.job where jobname='competition-lifecycle'),'5 seconds','round worker checks every five seconds');
+select is((select count(*) from cron.job where jobname='competition-lifecycle'),1::bigint,'faster processing reuses a single worker job');
+select ok(exists(select 1 from pg_indexes where schemaname='public' and indexname='bracket_rounds_open_deadline_idx'),'due-round lookup has a partial open-deadline index');
+select ok(exists(select 1 from cron.job where jobname='competition-lifecycle-history' and active),'frequent job diagnostics have bounded retention');
+select * from finish();
+rollback;

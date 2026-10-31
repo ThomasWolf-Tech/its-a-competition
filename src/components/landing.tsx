@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import Link from "next/link";
 import Icon from "@/components/icon";
-import { SHOWCASES, customShowcase, type Showcase } from "@/lib/showcases";
+import { MAX_TRENDING_CAROUSEL_BRACKETS, SHOWCASES, customShowcase, type Showcase } from "@/lib/showcases";
 import { useBracketConfig } from "@/lib/use-bracket-config";
 import { useBracketProgress } from "@/lib/use-bracket-progress";
 import { currentMatchup } from "@/lib/bracket-progress";
@@ -35,7 +35,7 @@ function BracketBackdrop() {
 }
 
 function SpotlightSlide({ slide, active, random }: { slide: Showcase; active: boolean; random: number }) {
-  const { state } = useBracketProgress(slide.id, slide.competitors);
+  const { state } = useBracketProgress(slide.progressId ?? slide.id, slide.competitors);
   const match = currentMatchup(state, random);
   const rounds = roundNames(slide.competitors.length);
   const complete = state.round === rounds.length;
@@ -58,7 +58,6 @@ function SpotlightSlide({ slide, active, random }: { slide: Showcase; active: bo
 
 export default function Landing() {
   const [active, setActive] = useState(0);
-  const [playing, setPlaying] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
   const reducedMotion = useSyncExternalStore(subscribeMotion, motionPreference, () => false);
@@ -66,7 +65,7 @@ export default function Landing() {
   const strike = useRef<HTMLDivElement>(null);
   const touchStart = useRef<number | null>(null);
   const { config } = useBracketConfig();
-  const slides = config ? [...SHOWCASES, customShowcase(config)] : SHOWCASES;
+  const slides = (config ? [...SHOWCASES, customShowcase(config)] : SHOWCASES).slice(0, MAX_TRENDING_CAROUSEL_BRACKETS);
   const [matchSeed, setMatchSeed] = useState(0);
   // Randomize after hydration and on slide changes, without server/client mismatch.
   useEffect(() => {
@@ -74,7 +73,7 @@ export default function Landing() {
     return () => cancelAnimationFrame(frame);
   }, [active]);
   function move(direction: number) { setActive(index => (index + direction + slides.length) % slides.length); }
-  const rotating = playing && !hovered && !focused && !reducedMotion;
+  const rotating = !hovered && !focused && !reducedMotion;
   useEffect(() => {
     if (!rotating) return;
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -124,7 +123,7 @@ export default function Landing() {
         <div className="hero-stage" aria-live={rotating ? "off" : "polite"}>{slides.map((slide, index) => <SpotlightSlide key={slide.id} slide={slide} active={index === active} random={matchSeed} />)}</div>
         <div className="carousel-bottom"><div className="carousel-dots" aria-label="Choose featured bracket">{slides.map((item, index) => <button type="button" key={item.id} className={index === active ? "active" : ""} aria-label={`Show ${item.title}`} aria-pressed={index === active} onClick={() => setActive(index)}><span /></button>)}</div>
           <a href="#about" className="scroll-invitation">What’s this all about? <Icon name="arrow" /></a>
-          <div className="carousel-controls"><span className="slide-count"><strong>0{active + 1}</strong> / 0{slides.length}</span><button type="button" className="carousel-arrow autoplay-toggle" disabled={reducedMotion} aria-label={reducedMotion ? "Auto-rotation disabled for reduced motion" : playing ? "Pause automatic slide rotation" : "Start automatic slide rotation"} onClick={() => setPlaying(value => !value)}><Icon name={playing && !reducedMotion ? "pause" : "play"} /></button><button type="button" className="carousel-arrow previous" aria-label="Previous featured bracket" onClick={() => move(-1)}><Icon name="arrow" /></button><button type="button" className="carousel-arrow" aria-label="Next featured bracket" onClick={() => move(1)}><Icon name="arrow" /></button></div></div>
+          <div className="carousel-controls"><button type="button" className="carousel-arrow previous" aria-label="Previous featured bracket" onClick={() => move(-1)}><Icon name="arrow" /></button><button type="button" className="carousel-arrow" aria-label="Next featured bracket" onClick={() => move(1)}><Icon name="arrow" /></button></div></div>
       </div>
       <div className="featured-caption"><span><span className="caption-square" /> A taste of what’s coming.</span><span>Demo creators and vote totals. Your saved bracket appears here as a local preview.</span></div>
     </section>

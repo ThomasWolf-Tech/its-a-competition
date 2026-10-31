@@ -1,0 +1,10 @@
+{
+  "tool": "Built-in image_gen.imagegen",
+  "edit_target": "Original public/brand/rally-relic-color.png, archived as rally-relic-color-with-brackets.png",
+  "prompt": "Edit target: the supplied transparent Rally Relic website logo. This is a precise removal-only edit. Remove ONLY the TWO tournament bracket diagrams behind the trophy: the large branching angular blue tournament lines to the lower left and lower right behind the central trophy. Replace the removed bracket shapes with genuine transparency. Preserve the entire central trophy EXACTLY: its blue curved cup handles on BOTH sides ARE PART OF THE TROPHY and MUST stay, along with the white game controller and colored buttons, yellow basketball, white-and-blue five-hole movie reel and winding perforated film strip, slender blue/white stem, yellow frosted donut with colored sprinkles, and blue/navy oval base. Do not redraw, restyle, recolor, rescale, move, crop, simplify, or modify ANY trophy element or edge. Keep the same square canvas, scale, centering, contours, colors, antialiasing and transparent background. No new text, no new objects. Output the identical trophy with only the separate background bracket diagrams gone.",
+  "reference_output": "03-rally-relic-no-brackets-reference.png",
+  "final_preparation": "scripts/remove-logo-brackets.mjs masks the two bracket regions from the original raster. All 629078 retained foreground pixels keep their original RGBA values; 191296 bracket-region pixels are removed. No new trophy pixels are generated in this removal-only asset.",
+  "prepared_asset": "public/brand/rally-relic-color.png",
+  "website_asset": "public/brand/rally-relic-trophy.png",
+  "transparent_background": true
+}

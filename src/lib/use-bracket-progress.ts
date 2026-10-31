@@ -15,18 +15,19 @@ function subscribe(listener: () => void) {
 }
 const serverSnapshot = () => null;
 
-export function useBracketProgress(id: string, competitors: Competitor[]) {
+export function useBracketProgress(id: string, competitors: Competitor[], enabled = true) {
   const key = progressKey(id, competitors);
-  const snapshot = useCallback(() => read(key), [key]);
+  const snapshot = useCallback(() => enabled ? read(key) : null, [key, enabled]);
   const raw = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   const state = useMemo(() => restoreProgress(raw, competitors), [raw, competitors]);
   const dispatch = useCallback((action: BracketAction) => {
+    if (!enabled) return;
     const previous = restoreProgress(read(key), competitors);
     const next = bracketReducer(previous, action);
     if (next === previous) return;
     const value = JSON.stringify({ round: next.round, picks: next.picks });
     try { sessionStorage.setItem(key, value); volatile.delete(key); } catch { volatile.set(key, value); }
     window.dispatchEvent(new Event("bracket-progress"));
-  }, [key, competitors]);
+  }, [key, competitors, enabled]);
   return { state, dispatch };
 }

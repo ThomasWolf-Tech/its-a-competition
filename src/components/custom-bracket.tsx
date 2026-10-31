@@ -4,9 +4,10 @@ import BracketDemo from "./bracket-demo";
 import { useBracketConfig } from "@/lib/use-bracket-config";
 import { configCompetitors } from "@/lib/bracket-config";
 import { categoryName } from "@/lib/bracket-categories";
+import { customProgressId } from "@/lib/bracket-schedule";
 export default function CustomBracket() {
   const { hydrated, config } = useBracketConfig();
   if (!hydrated) return <p role="status">Loading your bracket…</p>;
   if (!config) return <section className="competition-heading"><div><h1>Your rivalry starts here.</h1><p>There’s no bracket setup saved in this tab yet.</p><Link className="primary-button" href="/create">Create a bracket →</Link></div></section>;
-  return <><Link href="/create" className="back-link">← Edit bracket setup</Link><BracketDemo key={JSON.stringify(config)} title={config.title} description={config.description} category={categoryName(config.category)} competitors={configCompetitors(config)} trophyId={config.trophyId} progressId="custom" /></>;
+  return <><Link href="/create?import=preview" className="back-link">← Edit preview setup</Link><BracketDemo key={JSON.stringify(config)} title={config.title} description={config.description} category={categoryName(config.category)} competitors={configCompetitors(config)} trophyId={config.trophyId} progressId={customProgressId(config)} visibility={config.visibility} schedule={config.schedule} /></>;
 }

@@ -1,0 +1,26 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Suspense } from 'react';
+import { requireProfile } from '@/lib/auth';
+import { SavedBracketRemove } from '@/components/account-lifecycle';
+export const metadata: Metadata = { title: 'My brackets | It’s a Competition', robots: { index: false, follow: false } };
+export default function Page(props: PageProps<'/account/brackets'>) { return <main id="main-content" className="account-shell"><Suspense fallback={<p role="status">Loading your brackets…</p>}><Brackets {...props} /></Suspense></main>; }
+async function Brackets({ searchParams }: PageProps<'/account/brackets'>) {
+  const { supabase, user, profile } = await requireProfile();
+  const [owned, saved] = await Promise.all([
+    supabase.from('brackets').select('id,title,visibility,status,review_message').eq('owner_id', user.id).order('updated_at', { ascending: false }).limit(100),
+    supabase.from('saved_brackets').select('id,bracket_id,brackets(id,title,status)').eq('user_id', user.id).order('saved_at', { ascending: false }).limit(100),
+  ]);
+  const query = await searchParams;
+  return <>
+    <header className="account-heading"><div><span className="section-kicker">YOUR CORNER OF THE COMPETITION</span><h1>My brackets.</h1><p>{profile.display_name}, find your creations and saved competitions here.</p></div></header>
+    {query.deleted === '1' && <p className="auth-message" role="status">Bracket deleted. Its associated competition data has been removed.</p>}
+    <Link href="/create" className="primary-button" prefetch={false}>Create a bracket →</Link>
+    <section className="draft-list" aria-labelledby="creations-title"><h2 id="creations-title">Your brackets</h2>
+      {owned.error ? <p role="alert">We couldn’t load your brackets. Refresh to try again.</p> : owned.data?.length ? <ul>{owned.data.map(b => <li key={b.id}><div><Link href={b.status === 'draft' ? `/create?draft=${b.id}` : `/bracket/${b.id}`} prefetch={false}>{b.title || 'Untitled bracket'}</Link><p>{b.visibility === 'public' ? 'Public' : b.visibility === 'private' ? 'Private' : 'Visibility not chosen'} · {b.status === 'pending_review' ? 'Pending review' : b.status === 'draft' ? b.review_message ? 'Needs changes' : 'Draft' : b.status === 'active' ? 'Live' : 'Completed'}</p>{b.review_message && <p>{b.review_message}</p>}</div><Link href={`/bracket/${b.id}`} prefetch={false}>Open →</Link></li>)}</ul> : <p>No brackets yet.</p>}
+    </section>
+    <section className="draft-list" aria-labelledby="saved-title"><h2 id="saved-title">Saved brackets</h2>
+      {saved.error ? <p role="alert">We couldn’t load your saved list.</p> : saved.data?.length ? <ul>{saved.data.map(s => <li key={s.id}><div>{s.brackets ? <Link href={`/bracket/${s.brackets.id}`} prefetch={false}>{s.brackets.title}</Link> : <strong>Bracket unavailable</strong>}{!s.brackets && <p>{s.bracket_id === null ? 'This bracket was deleted by its creator.' : 'You no longer have access to this bracket.'}</p>}</div><SavedBracketRemove id={s.id} /></li>)}</ul> : <p>No saved brackets yet. Save a competition from its bracket page.</p>}
+    </section>
+  </>;
+}

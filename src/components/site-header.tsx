@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Icon from "@/components/icon";
 import BrandMark from "@/components/brand-mark";
+import AccountButton from "./account-button";
 import { SHOWCASES } from "@/lib/showcases";
 
 export default function SiteHeader() {
   const [theme, setTheme] = useState("dark");
   const [query, setQuery] = useState("");
-  const [modal, setModal] = useState<"search" | "profile" | null>(null);
+  const [modal, setModal] = useState<"search" | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const search = useRef<HTMLInputElement>(null);
   useEffect(() => { document.documentElement.dataset.theme = theme; }, [theme]);
@@ -28,23 +29,21 @@ export default function SiteHeader() {
         <nav className="nav-actions" aria-label="Main navigation">
           <Link href="/create" className="nav-item create-nav" aria-label="Create a bracket"><Icon name="plus" /><span>Create</span></Link>
           <button type="button" className="nav-item mobile-search" aria-label="Search brackets" onClick={() => open("search")}><Icon name="search" /></button>
-          <Link href="/#trending" className="nav-item" aria-label="Trending brackets"><Icon name="flame" /><span>Trending</span></Link>
+          <Link href="/trending" prefetch={false} className="nav-item" aria-label="Trending brackets"><Icon name="flame" /><span>Trending</span></Link>
           <span className="nav-divider" />
           <button type="button" className="icon-button theme-toggle" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}><Icon name={theme === "dark" ? "sun" : "moon"} /></button>
-          <button type="button" className="profile-button" aria-label="Open guest profile" onClick={() => open("profile")}><Icon name="user" /><span className="profile-label">Guest</span></button>
+          <Suspense fallback={<button type="button" className="profile-button" disabled aria-label="Checking sign-in status"><Icon name="user" /><span className="profile-label">Account</span></button>}><AccountButton /></Suspense>
         </nav>
       </div>
     </header>
     <dialog ref={dialog} className="site-dialog" aria-labelledby="dialog-title" onClose={() => setModal(null)} onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="dialog-top"><span className="section-kicker">IT’S A COMPETITION</span><button type="button" className="icon-button" aria-label="Close dialog" onClick={() => dialog.current?.close()}><Icon name="close" /></button></div>
-      {modal === "search" ? <>
+      {<>
         <h2 id="dialog-title">Find a little rivalry.</h2>
         <label className="dialog-search"><Icon name="search" /><input autoFocus aria-label="Search sample bracket titles and topics" placeholder="Snacks, movies, game night..." value={query} onChange={(event) => setQuery(event.target.value)} /></label>
         <p className="dialog-hint">Search our sample bracket concepts. Public discovery is coming later.</p>
         <div className="search-results" role="status">{results.length ? results.map(item => <div key={item.id}><span className="result-initial">{item.initials[0]}</span><div><strong>{item.title}</strong><small>{item.kicker} · Sample concept</small></div><Icon name="bracket" /></div>) : <p>No samples match “{query}”. Try snacks, movies, or games.</p>}</div>
         <Link href="/bracket" className="primary-button" onClick={() => dialog.current?.close()}>Try the 16-team demo <Icon name="arrow" /></Link>
-      </> : <>
-        <span className="dialog-emblem"><Icon name="user" /></span><h2 id="dialog-title">Hey, future champion.</h2><p>You’re exploring as a guest. Profiles, saved brackets, and sign-in are coming later. The practice bracket is ready whenever you are.</p><Link href="/bracket" className="primary-button" onClick={() => dialog.current?.close()}>Make your first picks <Icon name="arrow" /></Link>
       </>}
     </dialog>
   </>;

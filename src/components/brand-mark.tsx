@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function BrandMark({ footer = false }: { footer?: boolean }) {
   return <Image
-    src="/brand/rally-relic-color.png"
+    src="/brand/rally-relic-trophy-v2.png"
     alt=""
     width={72}
     height={72}

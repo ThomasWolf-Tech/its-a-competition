@@ -1,0 +1,11 @@
+# The Creator — Citizen5 exclusive
+
+Generated with the built-in image generation tool, October 30, 2026. Final asset: `public/trophies/exclusive/the-creator-smoke.png`. Original gold design remains as `the-creator.png` for reference but is not displayed. User clarified dark means mysterious obsidian mask with ethereal black smoke, not darker gold ornamentation; no laurel/jewels.
+
+## Final prompt
+
+Create an exclusive fantasy achievement trophy asset titled The Creator (title displayed separately, absolutely NO text in image). A single Guy Fawkes mask floating in ethereal black smoke. Almost entirely just the mask: dominant, front-facing, gently tilted, arched eyebrows, enigmatic narrow eyes, characteristic curled moustache, pointed goatee, restrained knowing smile. Dark polished obsidian and charcoal marble material with fine smoky silver veining and subtle silver edge highlights, luxurious sculptural craftsmanship like a high-end dramatic tragedy theatre-mask trophy. No gold, no laurel, no leaves, no wreath, no frame, no gems, no crown, no filmstrip, no pedestal, no person or hood. Dark mysterious mood, not horror. Wisps of semi-transparent black smoke curl close around the mask's contours and dissolve outward organically, with barely visible cool silver rim lighting so the black smoke remains readable against navy. Detailed painterly 3D collectible game reward aesthetic, beautifully tactile sculpted mask, dramatic chiaroscuro, preserve recognizable Guy Fawkes features. Entire mask and smoke fit within square canvas with padding. Actual alpha transparent background, never a black rectangle or checkerboard backdrop. No bright magical ribbons, no colorful neon. A unique mysterious website creator trophy.
+
+## Exclusivity
+
+Separate singleton creator_award record, assigned explicitly to the verified Citizen5 account ID. No ordinary client can insert/update/delete it. RLS exposes only the recipient's award. It is never in trophy_catalog or the builder TROPHIES array, so brackets cannot offer it and regular voting awards cannot grant it. Username changes do not change ownership. Account deletion removes the award; a new signup cannot reclaim it. Artwork is a publicly served site asset; award ownership is exclusive, not a restriction on downloading the image.

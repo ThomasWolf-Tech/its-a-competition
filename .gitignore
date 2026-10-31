@@ -17,6 +17,11 @@
 /.next/
 /out/
 
+# Local Supabase runtime data, downloaded binaries, and CLI credentials
+/.supabase-local/
+/supabase/.branches/
+/supabase/.temp/
+
 # production
 /build
 
@@ -39,3 +44,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Safe template only; actual environment files stay private.
+!.env.example
+
+/.next-auth-test/

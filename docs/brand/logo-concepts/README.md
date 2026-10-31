@@ -1,21 +1,23 @@
 # Rally Relic logo direction
 
-The user selected **concept 03 · Rally Relic** for It’s a Competition. The other four mockups were rejected and removed from this project folder, along with their prompt entries.
+The user selected concept 03, Rally Relic, for It's a Competition: controller, basketball, film reel/strip, and donut combine into a trophy in the navy, sky-blue, yellow, and chalk palette. The four rejected original concepts remain removed.
 
-The controller, basketball, film, and donut combine into a trophy-like silhouette in the navy, sky blue, yellow, and chalk palette.
+## Current design
 
-## Locked design
+October 28 supersedes the original background-bracket lock: the user requested removing both tournament diagrams behind the trophy. The trophy was retained from the original raster, with zero changes to its surviving RGBA pixels. The user then requested reworking **all basketball seam linework**, using real basketball images as references, without changing other logo elements.
 
-Both blue tournament brackets are approved exactly as drawn. Preserve their geometry, branches, positions, line thickness, colors, and angles in future revisions.
+The final basketball uses a continuous center cross and curved side channels based on Wilson reference photos. Its edit is composited only within the basketball face. Pixels outside that region and all alpha values are unchanged, preserving the original controller, buttons, blue handles, film reel/strip, stem, donut, sprinkles, base, and transparent silhouette.
 
-## Selected artwork
+- Active website asset: [rally-relic-trophy-v2.png](../../../public/brand/rally-relic-trophy-v2.png), used by shared `src/components/brand-mark.tsx` in the header/footer.
+- Browser icon: `src/app/icon.png`, resized from the same final artwork.
+- Original pre-removal raster: [rally-relic-color-with-brackets.png](./rally-relic-color-with-brackets.png).
+- Bracket-free, original-seam intermediate: `public/brand/rally-relic-color.png` and `public/brand/rally-relic-trophy.png`.
+- Built-in removal edit prompt/preparation: [bracket-removal.json](./bracket-removal.json); reference output [03-rally-relic-no-brackets-reference.png](./03-rally-relic-no-brackets-reference.png).
+- Built-in basketball edit prompt, reference URLs, and pixel-preservation checks: [basketball-linework.json](./basketball-linework.json); reference output [basketball-linework-reference.png](./basketball-linework-reference.png).
+- Reproducible asset preparation: `scripts/remove-logo-brackets.mjs` and `scripts/prepare-basketball-logo.mjs`.
 
-- [Refined film-reel version](./03-rally-relic-v2.png).
-- [Original selected concept](./03-rally-relic.png), retained for comparison.
-- The current refinement replaces the ambiguous ribbon with a recognizable circular film reel and film strip, including central picture frames and sprocket holes along both edges. It must preserve the rest of the composition.
+## Earlier artwork
 
-Generated using the built-in `image_gen.imagegen` tool. The original prompt is in [prompts.json](./prompts.json); the exact edit prompt is in [refinement-v2.json](./refinement-v2.json). The navy-backed images remain design references. The selected refined logo is now installed in the header and footer using the transparent asset at public/brand/rally-relic-color.png. A resized copy is used as src/app/icon.png for the browser icon. The built-in background-extraction prompt is saved in [web-cutout.json](./web-cutout.json).
+[Refined film-reel version](./03-rally-relic-v2.png) and [original selected concept](./03-rally-relic.png) remain historical references. Earlier prompts are in prompts.json, refinement-v2.json, web-cutout.json, and color-refinement.json. The old instruction to preserve the background brackets is superseded; the original trophy art remains the preservation baseline apart from the specifically requested basketball-line correction.
 
-The future explode-and-reassemble animation is recorded in [DEV_WISHLIST.md](../../../DEV_WISHLIST.md).
-
-The installed color refinement adds sky-blue/yellow controller buttons and a blue reel rim with a yellow hub; approved brackets and the rest of the composition are preserved. Its exact built-in edit prompt is in [color-refinement.json](./color-refinement.json).
+Future explode-and-reassemble animation remains on [DEV_WISHLIST.md](../../../DEV_WISHLIST.md).
