@@ -5,8 +5,8 @@ import BracketBuilder from "@/components/bracket-builder";
 import { requireProfile } from "@/lib/auth";
 import { UUID, readTiming, type SavedDraft } from "@/lib/bracket-draft";
 import type { BracketCategory } from "@/lib/bracket-categories";
-export const metadata: Metadata = { title: "Create a bracket | It’s a Competition", description: "Choose a private or public showdown, set the pace, add your competitors, and pick a trophy.", robots: { index: false, follow: false } };
-export default function Page(props: PageProps<"/create">) { return <main id="main-content"><Suspense fallback={<p className="builder-shell" role="status">Getting the arena ready…</p>}><Editor {...props} /></Suspense></main>; }
+export const metadata: Metadata = { title: "Create a bracket | It’s a Competition", description: "Choose visibility, add competitors, set round timing, and select a trophy.", robots: { index: false, follow: false } };
+export default function Page(props: PageProps<"/create">) { return <main id="main-content"><Suspense fallback={<p className="builder-shell" role="status">Loading bracket setup…</p>}><Editor {...props} /></Suspense></main>; }
 async function Editor({ searchParams }: PageProps<"/create">) {
   const query = await searchParams;
   const id = typeof query.draft === "string" ? query.draft : null;

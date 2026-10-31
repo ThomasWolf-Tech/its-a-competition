@@ -52,7 +52,7 @@ export default function AccountButton() {
     {open && <nav id="account-links" className="account-dropdown" aria-label="Your account">
       {signedIn ? <>
       <Link href="/account" prefetch={false} onClick={() => setOpenOn(null)}><Icon name="user" />Account</Link>
-      <Link href="/account/brackets" prefetch={false} onClick={() => setOpenOn(null)}><Icon name="bracket" />My Brackets</Link>
+      <Link href="/account/brackets" prefetch={false} onClick={() => setOpenOn(null)}><Icon name="bracket" />My brackets</Link>
       <Link href="/account/trophies" prefetch={false} onClick={() => setOpenOn(null)}><Icon name="trophy" />Trophy room</Link>
       <form action={signOut}><button type="submit"><Icon name="logout" />Sign out</button></form>
       </> : <Link href="/login" prefetch={false} onClick={() => setOpenOn(null)}><Icon name="user" />Sign in</Link>}

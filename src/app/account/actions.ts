@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { usernameError } from "@/lib/username";
 import { safeNext } from "@/lib/auth-navigation";
+import { UUID } from "@/lib/bracket-draft";
 
 export type UsernameState = { error: string; saved?: boolean };
 export async function saveUsername(_previous: UsernameState, formData: FormData): Promise<UsernameState> {
@@ -42,6 +43,23 @@ export async function removeSavedBracket(_previous: { error: string }, formData:
   if (!user) return { error: 'Sign in to update your saved brackets.' };
   const { error } = await supabase.rpc('remove_saved_competition', { p_saved_id: id });
   if (error) return { error: 'We couldn’t remove this saved item. Please try again.' };
+  revalidatePath('/account/brackets');
+  return { error: '' };
+}
+
+export async function deleteDraftBracket(_previous: { error: string }, formData: FormData): Promise<{ error: string }> {
+  const id = formData.get('id');
+  if (typeof id !== 'string' || !UUID.test(id) || formData.get('confirm') !== 'yes') return { error: 'Confirm that you want to permanently delete this draft.' };
+  const supabase = await createClient();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) return { error: 'Sign in again to delete your draft.' };
+  const { data: draft, error: readError } = await supabase.from('brackets').select('status').eq('id', id).eq('owner_id', user.id).maybeSingle();
+  if (readError) return { error: 'We couldn’t check this draft. Please try again.' };
+  if (!draft || draft.status !== 'draft') return { error: 'This draft is no longer available. Refresh your brackets before continuing.' };
+  const { error } = await supabase.rpc('delete_competition', { p_id: id });
+  if (error) return { error: 'We couldn’t delete your draft. Please try again.' };
+  revalidatePath(`/create`);
+  revalidatePath(`/bracket/${id}`);
   revalidatePath('/account/brackets');
   return { error: '' };
 }

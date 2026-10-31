@@ -42,7 +42,7 @@ function MatchCard({ match, state, dispatch, votingClosed = false, disabled = fa
         return <button type="button" className={`competitor-row${selected ? " selected" : ""}${done && !winner ? " eliminated" : ""}${competitor.id === championId ? " champion-entrant" : ""}`} key={competitor.id}
           disabled={!active || disabled} aria-pressed={selected} aria-label={`${active ? "Vote for" : winner ? "Winner:" : done ? "Eliminated:" : "Competitor:"} ${competitor.name}`}
           onClick={() => dispatch({ type: "vote", matchId: match.id, competitorId: competitor.id })}>
-          <span className="seed">{competitor.seed}</span><Avatar competitor={competitor} /><span className="competitor-name">{competitor.name}</span>
+          <span className="seed">{competitor.seed}</span><Avatar competitor={competitor} /><span className="competitor-name" title={competitor.name}>{competitor.name}</span>
           <span className={`vote-mark${selected ? " checked" : ""}`} aria-hidden="true">{selected ? "✓" : ""}</span>
         </button>;
       })}
@@ -112,13 +112,13 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
   return <>
     {complete && reveal.phase === "revealing" && <WinnerConfetti />}
     <section className="competition-heading" aria-labelledby="competition-title">
-      <div><div className="eyebrow"><span className="eyebrow-line" /> {title ? "YOUR SHOWDOWN" : "THE FIRST SHOWDOWN"} <span className="demo-pill">{controlled ? visibility === "private" ? "PRIVATE" : "PUBLIC" : "LOCAL PREVIEW"}</span></div>
+      <div><div className="eyebrow"><span className="demo-pill">{controlled ? visibility === "private" ? "PRIVATE" : "PUBLIC" : "LOCAL PREVIEW"}</span></div>
         <h1 id="competition-title">{title ?? <>Sixteen teams.<br className="mobile-break" /> <span>One crown.</span></>}</h1>
         {category && <span className="bracket-category">{category}</span>}
-        <p>{description || "A little friendly competition. A lot of bragging rights."}</p></div>
+        {description && <p>{description}</p>}</div>
       <div className="competition-stats" aria-label="Tournament format">
         <div><strong>{competitors.length}</strong><span>COMPETITORS</span></div><span className="stat-divider" />
-        <div><strong>{rounds}</strong><span>ROUNDS</span></div><span className="stat-divider" />
+        <div><strong>{rounds}</strong><span>{rounds === 1 ? "ROUND" : "ROUNDS"}</span></div><span className="stat-divider" />
         <div><Trophy /><span>ONE WINNER</span></div>
       </div>
     </section>
@@ -129,7 +129,7 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
         <div className="bracket-tab"><Icon name="bracket" className="bracket-small" /> The bracket <span className="format-pill">Single elimination</span></div>
         <div className="bracket-toolbarActions"><div className="legend"><span className="legend-dot" /> {complete ? "Competition complete" : votingClosed ? "Voting closed" : "Pick a competitor to vote"}</div><BracketRules visibility={visibility} schedule={schedule} shared={Boolean(controlled)} /></div>
       </div>
-      {deadline && !complete && <RoundClock deadline={deadline} now={now} />}
+      {deadline && !complete && <RoundClock deadline={deadline} now={now} preview={!controlled} />}
       <div className="round-progress" aria-label="Round progress">
         {names.map((name, index) => <div key={name} className={`round-step${state.round === index ? " current" : ""}${state.round > index ? " finished" : ""}`} aria-current={state.round === index ? "step" : undefined}>
           <span className="step-number">{state.round > index ? "✓" : `0${index + 1}`}</span><span>{name}</span>
@@ -147,12 +147,12 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
               return <div key={index} className={`bracket-column${column.side === "center" ? " final-column" : ""}`}>
                 {column.side === "center" && <div className={`champion-display${champion ? " crowned" : ""}`}>
                   <div className="trophy-medallion trophy-art"><Image src={trophy.src} alt={trophy.name} width={112} height={112} /></div>
-                  <span className="champion-label">{champion ? "YOUR CHAMPION" : "THE CROWN AWAITS"}</span>
-                  <strong>{champion ? champion.name : "Who wants it more?"}</strong>
-                  <span className="champion-caption">{champion ? "Bragging rights secured." : "Every pick brings us closer."}</span>
+                  <span className="champion-label">{champion ? "CHAMPION" : "THE CROWN AWAITS"}</span>
+                  <strong>{champion ? champion.name : "Awaiting the final"}</strong>
+                  <span className="champion-caption">{champion ? "Bragging rights secured." : ""}</span>
                 </div>}
                 {matches.map((match, matchIndex) => <div className={`match-position${match.round === state.round && reveal.phase !== "idle" ? " advancing-match" : ""}`} key={match.id} style={{ top: `${(matchIndex + 0.5) * 100 / matches.length}%` }}><MatchCard match={match} state={state} dispatch={dispatch} votingClosed={votingClosed} championId={champion?.id} disabled={busy || Boolean(controlled && (!controlled.votingEnabled || controlled.pending))} /></div>)}
-                {column.side === "center" && <div className="final-caption">{complete ? "THAT SETTLES IT." : "MEET IN THE MIDDLE."}<span aria-hidden="true">✳</span></div>}
+                {column.side === "center" && <div className="final-caption">{complete ? "THAT SETTLES IT." : ""}<span aria-hidden="true">✳</span></div>}
               </div>;
             })}
           </div>
@@ -162,7 +162,7 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
         <div className="round-status" role="status" aria-live="polite" aria-atomic="true">
           <span className={`status-icon${complete ? " complete" : ""}`} aria-hidden="true">{complete ? "★" : "↗"}</span>
           <div><strong>{complete ? `${champion?.name} takes the crown!` : `${names[state.round]} · ${pickedCount} of ${currentMatches.length} picks made`}</strong>
-            <span>{complete ? "Every round is in the books." : timed ? votingClosed ? controlled ? "Voting is closed. Results will appear when the round is finalized. Refresh to check." : "Voting has closed for this round. Automatic results aren’t available in this preview." : `Voting closes ${formatDeadline(deadline!)}.` : controlled ? "The creator ends each round. Matchups without votes advance the higher seed." : ready ? "All picks are in. Ready to end this round." : "Pick a winner in every matchup to advance."}</span></div>
+            <span>{complete ? "Every round is in the books." : timed ? votingClosed ? controlled ? "Voting is closed. Results will appear once finalized." : "Voting has closed for this round. Automatic results aren’t available in this preview." : `Voting closes ${formatDeadline(deadline!)}.` : controlled ? "The creator ends each round. Matchups without votes advance the higher seed." : ready ? "All picks are in. Ready to end this round." : "Pick a winner in every matchup to advance."}</span></div>
         </div>
         {!timed && (!controlled || controlled.canEndRound) && <div className="control-buttons">
           {!controlled && <button type="button" className="reset-button" disabled={busy} onClick={() => dispatch({ type: "reset" })}><span aria-hidden="true">↺</span> Reset bracket</button>}
@@ -171,6 +171,6 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
       </div>
       {results}
     </section>
-    <div className="demo-note"><span aria-hidden="true">ⓘ</span> {controlled ? "Shared competition. Your votes are saved to your account. Results are revealed after each round closes." : <>{title ? "A local preview, not a published competition." : "A practice bracket with fictional teams."} Picks and round progress stay in this browser tab.{!timed && " Reset to play again."}</>}</div>
+    <div className="demo-note"><span aria-hidden="true">ⓘ</span> {controlled ? "Your votes are saved to your account until the round closes. Final results are kept; individual votes are then removed." : <>{title ? "A local preview, not a published competition." : "A practice bracket with fictional teams."} Picks and round progress stay in this browser tab.{!timed && " Reset to play again."}</>}</div>
   </>;
 }

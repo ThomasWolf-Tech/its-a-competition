@@ -1,8 +1,8 @@
 .builder-shell { max-width: 1240px; margin: 0 auto; padding: 34px 32px 80px; }
 .builder-back { color: var(--muted); font-size: var(--type-ui); text-decoration: none; }
 .builder-back:hover { color: var(--action); }
-.builder-heading { padding: 40px 0 36px; }
-.builder-heading h1 { font-size: clamp(32px, 4vw, 49px); line-height: 1.12; letter-spacing: -1.8px; margin: 16px 0; font-weight: 750; }
+.builder-heading { padding: 28px 0; }
+.builder-heading h1 { font-size: clamp(32px, 4vw, 49px); line-height: 1.12; letter-spacing: -.03em; margin: 0; font-weight: 750; }
 .builder-heading h1 span { color: var(--action); }
 .builder-heading > p { color: var(--muted); font-size: var(--type-body); margin: 0; }
 .builder-layout { display: grid; grid-template-columns: minmax(0, 1fr) 310px; align-items: start; gap: 28px; }
@@ -11,14 +11,14 @@
 .builder-sectionTitle { display: flex; align-items: center; gap: 14px; margin-bottom: 25px; }
 .builder-sectionTitle > span:first-child { color: var(--action); font-size: var(--type-small); font-weight: 750; border: 1px solid var(--line); background: var(--surface-soft); border-radius: 8px; padding: 10px; }
 .builder-sectionTitle > div { flex: 1; }
-.builder-sectionTitle h2 { font-size: 19px; margin: 0 0 5px; letter-spacing: -.4px; }
+.builder-sectionTitle h2 { font-size: 19px; margin: 0; letter-spacing: -.4px; }
 .builder-sectionTitle p { font-size: var(--type-ui); color: var(--muted); margin: 0; line-height: 1.5; }
 .builder-sectionTitle > svg { color: var(--muted); width: 23px; }
 .builder-field { min-width: 0; }
 .builder-field label { display: flex; align-items: center; gap: 10px; font-size: var(--type-ui); font-weight: 650; margin-bottom: 9px; }
 .builder-field label > span { color: var(--muted); font-size: var(--type-caption); font-weight: 400; }
-.builder-shell input, .builder-shell select { font: inherit; font-size: var(--type-base); height: 47px; width: 100%; color: var(--text); border: 1px solid var(--line); border-radius: 8px; background: var(--background); padding: 0 13px; }
-.builder-shell input::placeholder { color: var(--muted); opacity: .8; }
+.builder-shell input, .builder-shell select { font: inherit; font-size: var(--type-base); height: 47px; width: 100%; color: var(--text); border: 1px solid var(--control-border); border-radius: 8px; background: var(--background); padding: 0 13px; }
+.builder-shell input::placeholder { color: var(--muted); opacity: 1; }
 .builder-shell input:focus-visible, .builder-shell select:focus-visible, .builder-shell button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .builder-shell input[aria-invalid="true"] { border: 2px solid var(--champion); }
 .builder-fieldFoot { display: flex; justify-content: space-between; gap: 12px; font-size: var(--type-fine); color: var(--muted); margin-top: 8px; min-height: 17px; }
@@ -35,11 +35,11 @@
 .builder-seed { color: var(--action); font-size: var(--type-caption); font-weight: 700; }
 .builder-counter { position: absolute; right: 2px; bottom: -2px; color: var(--muted); font-size: var(--type-caption); }
 .builder-categories { display: flex; gap: 7px; margin: 0 0 18px; flex-wrap: wrap; }
-.builder-categories button { flex: 1; cursor: pointer; padding: 10px 9px; background: var(--background); color: var(--muted); border: 1px solid var(--line); border-radius: 8px; font-size: var(--type-small); }
+.builder-categories button { flex: 1; cursor: pointer; padding: 10px 9px; background: var(--background); color: var(--muted); border: 1px solid var(--control-border); border-radius: 8px; font-size: var(--type-small); }
 .builder-categories button span { margin-left: 8px; opacity: .65; font-size: var(--type-caption); }
 .builder-categories button[aria-pressed="true"] { color: var(--action); background: var(--selected); border-color: var(--action); }
 .builder-trophyGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.builder-trophyChoice { position: relative; display: flex; align-items: center; flex-direction: column; gap: 7px; padding: 14px 4px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--background); color: var(--text); cursor: pointer; transition: border-color .16s, background-color .16s; }
+.builder-trophyChoice { position: relative; display: flex; align-items: center; flex-direction: column; gap: 7px; padding: 14px 4px 12px; border: 1px solid var(--control-border); border-radius: 8px; background: var(--background); color: var(--text); cursor: pointer; transition: border-color .16s, background-color .16s; }
 .builder-trophyChoice img { width: 100%; max-width: 168px; height: 168px; object-fit: contain; }
 .builder-trophyChoice > span:last-child { font-size: var(--type-fine); line-height: 1.4; min-height: 28px; padding: 0 2px; }
 .builder-trophyChoice:hover { border-color: var(--action); background: var(--surface-soft); }
@@ -48,7 +48,7 @@
 .builder-summary { position: sticky; top: 105px; text-align: center; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 24px; overflow: hidden; }
 .builder-summaryTop { display: flex; justify-content: center; align-items: center; gap: 9px; color: var(--action); font-size: var(--type-caption); letter-spacing: 1.3px; }
 .builder-summaryTop svg { width: 15px; height: 15px; }
-.builder-summaryTrophy { position: relative; display: block; width: 176px; height: 176px; object-fit: contain; margin: 26px auto 8px; }
+.builder-summaryTrophy { position: relative; display: block; width: 176px; height: 176px; object-fit: contain; margin: 0 auto 8px; }
 .builder-prize { color: var(--champion); font-size: var(--type-fine); margin: 4px 0 14px; }
 .builder-summary h2 { font-size: 22px; line-height: 1.25; letter-spacing: -.5px; overflow-wrap: anywhere; margin: 0 auto 24px; }
 .builder-summaryStats { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
@@ -67,7 +67,7 @@
 .builder-miniBracket span:nth-child(odd)::after { content: ""; display: block; width: 24px; height: 32px; border: solid var(--line); border-width: 1px 1px 0 0; position: relative; left: 100%; top: 9px; }
 .builder-miniBracket span:nth-child(even)::after { content: ""; display: block; width: 24px; height: 32px; border: solid var(--line); border-width: 1px 0 0 1px; position: relative; left: -24px; top: 9px; }
 @media(max-width: 1050px) { .builder-layout { grid-template-columns: minmax(0, 1fr) 265px; gap: 20px; } .builder-section { padding: 22px; } .builder-trophyGrid { grid-template-columns: repeat(3, minmax(0,1fr)); } .builder-countRow { grid-template-columns: 1fr; gap: 12px; } }
-@media(max-width: 760px) { .builder-shell { padding: 25px 20px 50px; } .builder-heading { padding: 30px 0; } .builder-layout { grid-template-columns: 1fr; } .builder-summary { position: relative; top: 0; } .builder-summaryTrophy { margin-top: 16px; } .builder-summary h2 { max-width: 300px; } .builder-summaryStats, .builder-submit { max-width: 360px; margin: 0 auto; } .builder-section { padding: 21px 18px; } .builder-sectionTitle { gap: 10px; } .builder-sectionTitle h2 { font-size: 17px; } .builder-sectionTitle p { font-size: var(--type-fine); } .builder-competitorGrid { column-gap: 12px; } .builder-categories button { padding: 10px 6px; } .builder-categories button span { display: none; } .builder-trophyGrid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media(max-width: 760px) { .builder-shell { padding: 25px 20px 50px; } .builder-heading { padding: 24px 0; } .builder-layout { grid-template-columns: 1fr; } .builder-summary { position: relative; top: 0; } .builder-summaryTrophy { margin-top: 16px; } .builder-summary h2 { max-width: 300px; } .builder-summaryStats, .builder-submit { max-width: 360px; margin: 0 auto; } .builder-section { padding: 21px 18px; } .builder-sectionTitle { gap: 10px; } .builder-sectionTitle h2 { font-size: 17px; } .builder-sectionTitle p { font-size: var(--type-fine); } .builder-competitorGrid { column-gap: 12px; } .builder-categories button { padding: 10px 6px; } .builder-categories button span { display: none; } .builder-trophyGrid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
 @media(prefers-reduced-motion: reduce) { .builder-trophyChoice { transition: none; } }
 
 @media(max-width: 480px) { .builder-trophyGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -77,8 +77,8 @@
 .builder-trophyLabel small { color: var(--muted); font-size: var(--type-caption); }
 
 .builder-descriptionField, .builder-categoryField { margin-top: 22px; }
-.builder-shell textarea { width: 100%; resize: vertical; min-height: 100px; font: inherit; font-size: var(--type-base); line-height: 1.6; color: var(--text); border: 1px solid var(--line); border-radius: 8px; background: var(--background); padding: 12px 13px; }
-.builder-shell textarea::placeholder { color: var(--muted); opacity: .8; }
+.builder-shell textarea { width: 100%; resize: vertical; min-height: 100px; font: inherit; font-size: var(--type-base); line-height: 1.6; color: var(--text); border: 1px solid var(--control-border); border-radius: 8px; background: var(--background); padding: 12px 13px; }
+.builder-shell textarea::placeholder { color: var(--muted); opacity: 1; }
 .builder-shell textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .builder-shell textarea[aria-invalid="true"], .builder-shell select[aria-invalid="true"] { border: 2px solid var(--champion); }
 .builder-descriptionField .builder-fieldFoot { line-height: 1.6; }
@@ -91,7 +91,7 @@
 .builder-choiceLegend > span { color: var(--muted); font-size: var(--type-caption); font-weight: 400; margin-left: 8px; }
 .builder-visibilityChoices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .builder-timingChoices { display: grid; gap: 10px; }
-.builder-choice { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 18px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--background); cursor: pointer; }
+.builder-choice { position: relative; display: flex; align-items: flex-start; gap: 12px; padding: 18px 16px; border: 1px solid var(--control-border); border-radius: 8px; background: var(--background); cursor: pointer; }
 .builder-choice:has(input:checked) { border-color: var(--action); background: var(--selected); }
 .builder-choice:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
 .builder-choice > input { position: absolute; opacity: 0; width: 1px; height: 1px; padding: 0; }
@@ -100,7 +100,7 @@
 .builder-choice strong { font-size: var(--type-ui); line-height: 1.5; }
 .builder-choice small { color: var(--muted); font-size: var(--type-small); line-height: 1.6; }
 .builder-choiceCheck { width: 18px; flex-shrink: 0; color: var(--action); font-size: var(--type-ui); }
-.builder-customizeRounds { display: flex; align-items: center; gap: 12px; width: fit-content; min-height: 44px; margin: 18px 0 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--background); color: var(--text); font-size: var(--type-ui); font-weight: 600; cursor: pointer; }
+.builder-customizeRounds { display: flex; align-items: center; gap: 12px; width: fit-content; min-height: 44px; margin: 18px 0 12px; padding: 10px 14px; border: 1px solid var(--control-border); border-radius: 8px; background: var(--background); color: var(--text); font-size: var(--type-ui); font-weight: 600; cursor: pointer; }
 .builder-customizeRounds:hover { border-color: var(--action); }
 .builder-customizeRounds:has(input:checked) { border-color: var(--action); background: var(--selected); }
 .builder-customizeRounds:has(input:focus-visible) { outline: 2px solid var(--focus); outline-offset: 3px; }
@@ -141,3 +141,6 @@
 @media(max-width: 1050px) and (min-width: 761px) { .builder-visibilityChoices { grid-template-columns: 1fr; } }
 @media(max-width: 520px) { .builder-visibilityChoices, .builder-roundInputs { grid-template-columns: 1fr; } .builder-schedulePreview { padding: 14px; } .builder-roundField { padding: 14px 12px; } .builder-lockedActions { align-items: stretch; flex-direction: column; } }
 .builder-durationInputs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+
+.builder-choiceGroup[aria-invalid="true"] .builder-choice { border-color: var(--champion); }
+.builder-shell :is(input, select, textarea) { scroll-margin-top: calc(var(--header-height) + 24px); }

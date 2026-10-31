@@ -85,27 +85,27 @@ export default function AuthForm({ next = "/account", googleEnabled = false, ini
     finally { setBusy(false); }
   }
   return <section className="auth-card">
-    <span className="section-kicker">YOUR NEXT RIVALRY AWAITS</span>
-    <h1>{mode === "signup" ? "Join the competition." : mode === "forgot" ? "Forgot your password?" : mode === "reset" ? "A fresh start." : "Welcome back."}</h1>
-    <p>{mode === "forgot" ? "We’ll email you a link to choose a new password." : mode === "reset" ? "Choose a new password for your account." : "Save your brackets and come back for the next round."}</p>
+
+    <h1>{mode === "signup" ? "Create account" : mode === "forgot" ? "Forgot your password?" : mode === "reset" ? "Reset password" : "Sign in"}</h1>
+    <p>{mode === "forgot" ? "We’ll email you a link to choose a new password." : mode === "reset" ? "Choose a new password for your account." : mode === "signup" ? "Create an account to vote and manage your brackets." : "Sign in to vote and manage your brackets."}</p>
     {!reset && mode !== "forgot" && <>
       <div className="auth-tabs" aria-label="Account options"><button type="button" aria-pressed={mode === "login"} disabled={busy} onClick={() => changeMode("login")}>Sign in</button><button type="button" aria-pressed={mode === "signup"} disabled={busy} onClick={() => changeMode("signup")}>Create account</button></div>
       <button className="auth-google" type="button" disabled={busy || !googleEnabled} onClick={google}>Continue with Google</button>
-      {!googleEnabled && <p className="auth-hint">Google sign-in isn’t available yet. Use email for now.</p>}
+      {!googleEnabled && <p className="auth-hint">Google sign-in is unavailable. Use email instead.</p>}
       <div className="auth-divider">or use your email</div>
     </>}
     <form onSubmit={submit} className="auth-fields">
-      {mode === "signup" && <label htmlFor="auth-username">Username<input id="auth-username" type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} required minLength={3} maxLength={24} pattern="[A-Za-z0-9_]{3,24}" value={username} onChange={e => setUsername(e.target.value)} disabled={busy} aria-describedby="signup-username-help" /><small id="signup-username-help">Your public name. Use 3–24 letters, numbers, or underscores. Capitalization doesn’t make a name unique. You can change it once every three months.</small></label>}
+      {mode === "signup" && <label htmlFor="auth-username">Username<input id="auth-username" type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} required minLength={3} maxLength={24} pattern="[A-Za-z0-9_]{3,24}" value={username} onChange={e => setUsername(e.target.value)} disabled={busy} aria-describedby="signup-username-help" /><small id="signup-username-help">Your username is public. Use 3–24 English letters, numbers, or underscores. Names are unique regardless of capitalization. After choosing a username, you must wait three months to change it.</small></label>}
       {mode !== "reset" && <label htmlFor="auth-email">Email<input id="auth-email" type="email" autoComplete="email" required maxLength={254} value={email} onChange={e => setEmail(e.target.value)} disabled={busy} /></label>}
       {mode !== "forgot" && <label htmlFor="auth-password">{mode === "reset" ? "New password" : "Password"}<input id="auth-password" type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} required minLength={mode === "login" ? undefined : 8} maxLength={128} value={password} onChange={e => setPassword(e.target.value)} disabled={busy} />{mode !== "login" && <small>Use at least 8 characters.</small>}</label>}
       {(mode === "signup" || mode === "reset") && <label htmlFor="auth-repeat">Confirm password<input id="auth-repeat" type="password" autoComplete="new-password" required minLength={8} maxLength={128} value={repeat} onChange={e => setRepeat(e.target.value)} disabled={busy} /></label>}
       {error && <p className="auth-error" role="alert">{error}</p>}
       {message && <p className="auth-message" role="status">{message}</p>}
-      <button className="primary-button" type="submit" disabled={busy}>{busy ? "One moment…" : mode === "signup" ? "Create account" : mode === "forgot" ? "Send reset link" : mode === "reset" ? "Save new password" : "Sign in"}</button>
+      <button className="primary-button" type="submit" disabled={busy}>{busy ? canResend ? "Sending confirmation…" : mode === "signup" ? "Creating account…" : mode === "forgot" ? "Sending reset link…" : mode === "reset" ? "Saving password…" : "Signing in…" : mode === "signup" ? "Create account" : mode === "forgot" ? "Send reset link" : mode === "reset" ? "Save new password" : "Sign in"}</button>
     </form>
     {canResend && <button type="button" className="auth-textButton" disabled={busy} onClick={resend}>Resend confirmation email</button>}
     {mode === "login" && <button type="button" className="auth-textButton" disabled={busy} onClick={() => changeMode("forgot")}>Forgot your password?</button>}
     {mode === "forgot" && <button type="button" className="auth-textButton" disabled={busy} onClick={() => changeMode("login")}>Back to sign in</button>}
-    <Link href="/bracket" className="auth-demoLink">Just exploring? Try the practice bracket →</Link>
+    <Link href="/bracket" className="auth-demoLink">Try the practice bracket →</Link>
   </section>;
 }

@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { readProfile } from "@/lib/profile";
 export const metadata: Metadata = { title: "Sign in | It’s a Competition", robots: { index: false, follow: false } };
-export default function Page(props: PageProps<"/login">) { return <main id="main-content" className="auth-shell"><Suspense fallback={<p role="status">Getting your account ready…</p>}><Login {...props} /></Suspense></main>; }
+export default function Page(props: PageProps<"/login">) { return <main id="main-content" className="auth-shell"><Suspense fallback={<p role="status">Loading sign-in…</p>}><Login {...props} /></Suspense></main>; }
 async function Login({ searchParams }: PageProps<"/login">) {
   const query = await searchParams;
   const next = safeNext(query.next);

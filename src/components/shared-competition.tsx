@@ -70,6 +70,6 @@ export default function SharedCompetition({ bracket: initialSnapshot, signedIn }
         controlled={{ state, dispatch, pending, closing, pollError: liveStatus.error, clockOffset: liveStatus.clockOffset, onRetry: () => router.refresh(), canEndRound: bracket.isOwner && bracket.timingMode === 'manual' && bracket.status === 'active', votingEnabled: signedIn && bracket.status === 'active' }} />
 
     </>}
-    {bracket.isOwner && <details className="competition-delete"><summary>Delete this bracket</summary><p>This permanently removes its competitors, votes, results, invitations, and activity. People who saved it will see that it was deleted.</p><button type="button" className="primary-button" disabled={pending} onClick={() => command({ kind: 'delete' })}>{pending ? 'Working…' : 'Delete bracket permanently'}</button></details>}
+    {bracket.isOwner && <details className="competition-delete"><summary>Delete this bracket</summary><p>This permanently removes its competitors, votes, results, invitations, and activity. People who saved it will see that it was deleted.</p><button type="button" className="primary-button" disabled={pending} onClick={() => command({ kind: 'delete' })}>Delete bracket permanently</button></details>}
   </>;
 }

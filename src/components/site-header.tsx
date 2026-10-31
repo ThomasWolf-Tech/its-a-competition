@@ -23,7 +23,7 @@ export default function SiteHeader() {
       <div className="nav-inner">
         <Link href="/" className="wordmark" aria-label="It's a Competition home"><BrandMark /><span>it’s a<br /><strong>competition<span className="brand-period">.</span></strong></span></Link>
         <form className="nav-search" role="search" onSubmit={(event) => { event.preventDefault(); open("search"); }}>
-          <Icon name="search" /><input ref={search} aria-label="Search demo brackets" placeholder="Find your next rivalry..." value={query} onChange={(event) => setQuery(event.target.value)} />
+          <Icon name="search" /><input ref={search} aria-label="Search demo brackets" placeholder="Search demo brackets…" value={query} onChange={(event) => setQuery(event.target.value)} />
           <button type="submit" aria-label="Search brackets"><Icon name="arrow" /></button>
         </form>
         <nav className="nav-actions" aria-label="Main navigation">
@@ -37,13 +37,13 @@ export default function SiteHeader() {
       </div>
     </header>
     <dialog ref={dialog} className="site-dialog" aria-labelledby="dialog-title" onClose={() => setModal(null)} onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
-      <div className="dialog-top"><span className="section-kicker">IT’S A COMPETITION</span><button type="button" className="icon-button" aria-label="Close dialog" onClick={() => dialog.current?.close()}><Icon name="close" /></button></div>
+      <div className="dialog-top"><button type="button" className="icon-button" aria-label="Close dialog" onClick={() => dialog.current?.close()}><Icon name="close" /></button></div>
       {<>
-        <h2 id="dialog-title">Find a little rivalry.</h2>
+        <h2 id="dialog-title">Search demo brackets</h2>
         <label className="dialog-search"><Icon name="search" /><input autoFocus aria-label="Search sample bracket titles and topics" placeholder="Snacks, movies, game night..." value={query} onChange={(event) => setQuery(event.target.value)} /></label>
-        <p className="dialog-hint">Search our sample bracket concepts. Public discovery is coming later.</p>
-        <div className="search-results" role="status">{results.length ? results.map(item => <div key={item.id}><span className="result-initial">{item.initials[0]}</span><div><strong>{item.title}</strong><small>{item.kicker} · Sample concept</small></div><Icon name="bracket" /></div>) : <p>No samples match “{query}”. Try snacks, movies, or games.</p>}</div>
-        <Link href="/bracket" className="primary-button" onClick={() => dialog.current?.close()}>Try the 16-team demo <Icon name="arrow" /></Link>
+        <p className="dialog-hint">Search sample brackets, or browse Trending for public competitions.</p>
+        <div className="search-results" role="status">{results.length ? results.map(item => <Link key={item.id} href={item.href} onClick={() => dialog.current?.close()}><span className="result-initial">{item.initials[0]}</span><div><strong>{item.title}</strong><small>{item.kicker} · Sample concept</small></div><Icon name="bracket" /></Link>) : <p>No samples match “{query}”. Try snacks, movies, or games.</p>}</div>
+        <Link href="/trending" className="primary-button" onClick={() => dialog.current?.close()}>Browse trending brackets <Icon name="arrow" /></Link>
       </>}
     </dialog>
   </>;

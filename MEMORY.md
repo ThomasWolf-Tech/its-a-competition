@@ -196,3 +196,23 @@
 - Normal status reads remain one/visible minute, 15 two-second checks after cutoff, then ten-second checks until two minutes overdue, then one/minute. Hidden/completed polling stops; only changed status/round loads a full snapshot. No route rendering dependency for round transitions.
 - Migration `20261030214038_responsive_round_processing.sql` applied locally/hosted: one existing worker every5sec, partial open-deadline index, daily cleanup of this worker’s >7day run diagnostics. No real bracket deadlines/results rewritten.
 - Passed clean replay, 354 SQL assertions, concurrency, real local lifecycle API/Cron integration, lint/TypeScript/build. Browser used disposable 32-entrant 1-minute bracket; Round of 16/quarterfinal/semifinal voting controls visible, overlay cleared, semifinal vote successfully saved without manual refresh. Temporary fixtures removed and tabs closed.
+
+## Design context initialization — October 30
+
+- User confirmed primary audience: friends and communities settling playful debates through public voting brackets or private solo/invited competitions; responsive web first, native apps later. PRODUCT.md captures the durable product record.
+- User chose code-first for future landing pages/showcases; saved as buildPath=code in .impeccable/config.json. Live-mode setup targets src/app/layout.tsx; no CSP detected and no UI changes made during initialization.
+- Public share images were clarified as optional polish, not a confirmed MVP requirement; PRE_LAUNCH_CHECKLIST.md still lists that planning item.
+
+## UI content and usability cleanup — October 30
+
+- User approved the full-site audit’s content and identified frontend usability/accessibility fixes. Tone decision: playful mainly in marketing/celebrations; direct forms; businesslike settings. Preserve branding, product rules, API contracts and data models.
+- Implemented across frontend routes: concise headings/helpers/loading/empty states, truthful current capability copy, consistent My brackets/practice/competitor terms; real trending titles and sample search results open their existing bracket pages. Shared submission focuses invalid visibility/title/competitors/durations; error/unavailable views retain main/skip targets and use this Next version’s retry API. Dedicated accessible control-border tokens, larger carousel-dot hit areas, two-line competitor labels with full accessible names/native hover titles; trophy eligibility retained in an expandable explanation. No backend changes or real stored data mutations.
+- Audit and verification coverage are recorded in docs/ui-ux-content-audit.md. Remaining separate reviews: persistent carousel pause/accessibility alternatives (user previously removed pause), theme persistence, physical device/screen-reader and full live-round/auth release walkthrough.
+- Final verification: 92 app/domain tests, application ESLint, TypeScript and production build pass. Desktop/mobile and both-theme UI checks plus local preview completion passed; guest sign-in/signup/recovery layouts checked without auth submissions. Temporary guest preview stopped, generated config additions removed, viewport reset and QA tabs closed; normal port3000 preview restored with fresh CSS. Screenshot /private/tmp/competition-ui-cleanup-desktop.jpg. No commit/deployment requested or made.
+
+## Draft deletion — October 30
+
+- User clarified request: delete draft brackets; saved removal must clearly mean removing a bookmark, not the source competition. My brackets now shows Delete draft only on draft rows, with a permanent-deletion disclosure and required confirmation. Existing edit links remain. Server action checks session, ownership and current draft status before using the existing owner-only delete RPC. No schema changes.
+- Saved section explains that Remove from saved leaves the original competition intact. App lint/TypeScript/build passed; nine isolated server-action checks cover malformed/unconfirmed/signed-out/unavailable/non-draft/error/success paths. Desktop/mobile confirmation inspected without submitting a real deletion. Screenshot /private/tmp/draft-delete-confirmation.jpg.
+
+- Scoped draft/saved-list polish: compact matte Edit/Delete controls; confirmation now spans the card beneath the row with short consequence text, existing required checkbox, and Cancel that restores trigger focus. Saved removal uses the same quiet button style; its explanation appears only for populated lists. Existing delete/remove server behavior unchanged. Desktop/mobile and both themes reviewed; saved populated layout used a temporary display-only fixture, removed before the successful production build. Lint/typecheck pass, no real deletions. Screenshot /private/tmp/draft-controls-polished.jpg.

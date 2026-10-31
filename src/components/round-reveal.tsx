@@ -27,9 +27,9 @@ export function useRoundReveal(source: BracketState, enabled = true) {
   }, [source.round, enabled]);
   return { state: enabled && source.round > view.round ? view : source, phase, holding: enabled && source.round > view.round || phase === 'settling' };
 }
-export function RoundClock({ deadline, now }: { deadline: string; now: number }) {
+export function RoundClock({ deadline, now, preview = false }: { deadline: string; now: number; preview?: boolean }) {
   const remaining = Date.parse(deadline) - now;
-  return <div className={`round-clock${remaining <= 60_000 ? ' round-clock-urgent' : ''}`} aria-label="Round countdown"><span>{remaining <= 0 ? 'VOTING CLOSED' : 'ROUND ENDS IN'}</span><strong>{remaining <= 0 ? 'Awaiting results' : remaining < 60_000 ? 'Less than a minute' : formatDuration(remaining)}</strong></div>;
+  return <div className={`round-clock${remaining <= 60_000 ? ' round-clock-urgent' : ''}`} aria-label="Round countdown"><span>{remaining <= 0 ? 'VOTING CLOSED' : 'ROUND ENDS IN'}</span><strong>{remaining <= 0 ? preview ? 'Preview voting closed' : 'Awaiting results' : remaining < 60_000 ? 'Less than a minute' : formatDuration(remaining)}</strong></div>;
 }
 export function CountingOverlay({ error, onRetry }: { error?: string; onRetry?: () => void }) {
   const overlay = useRef<HTMLDivElement>(null);
@@ -49,7 +49,7 @@ export function CountingOverlay({ error, onRetry }: { error?: string; onRetry?: 
     window.addEventListener('resize', position);
     return () => { window.removeEventListener('scroll', position, true); window.removeEventListener('resize', position); };
   }, []);
-  return <div ref={overlay} className="round-counting" role="status" aria-live="polite"><div ref={card} className="round-counting-card"><Image className="counting-logo" src="/brand/rally-relic-trophy-v2.png" alt="" width={128} height={128} /><h2>Counting votes.<br />Settling rivalries.</h2><p>{error || 'The next round is almost ready.'}</p>{onRetry && <button type="button" className="auth-textButton" onClick={onRetry}>Check results</button>}</div></div>;
+  return <div ref={overlay} className="round-counting" role="status" aria-live="polite"><div ref={card} className="round-counting-card"><Image className="counting-logo" src="/brand/rally-relic-trophy-v2.png" alt="" width={128} height={128} /><h2>Finalizing results</h2><p>{error || 'Voting is closed while results are finalized.'}</p>{onRetry && <button type="button" className="auth-textButton" onClick={onRetry}>Check results</button>}</div></div>;
 }
 export function WinnerConfetti() {
   return <div className="winner-confetti" aria-hidden="true">{Array.from({ length: 72 }, (_, i) => <i key={i} style={{ '--x': `${(i * 37) % 101}%`, '--drift': `${((i * 53) % 240) - 120}px`, '--delay': `${i % 9 * 35}ms`, '--turn': `${180 + i * 47}deg`, '--confetti-color': ['#F4D04E','#65B8FF','#F5F7FA'][i % 3] } as CSSProperties} />)}</div>;

@@ -8,7 +8,7 @@
 .trending-shell summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: 2px; }
 .trending-picker { position: relative; width: 100%; max-width: 380px; margin: 32px 0 36px; }
 .trending-picker-label { display: block; margin-bottom: 10px; color: var(--muted); font-size: var(--type-small); font-weight: 600; }
-.trending-picker-trigger { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 50px; padding: 12px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); font-size: var(--type-base); text-align: left; }
+.trending-picker-trigger { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 50px; padding: 12px 16px; border: 1px solid var(--control-border); border-radius: 8px; background: var(--surface); color: var(--text); font-size: var(--type-base); text-align: left; }
 .trending-picker-trigger:hover, .trending-picker-trigger[aria-expanded="true"] { border-color: var(--action); }
 .trending-picker-trigger svg { flex-shrink: 0; width: 18px; height: 18px; color: var(--action); transform: rotate(90deg); }
 .trending-picker-trigger[aria-expanded="true"] svg { transform: rotate(-90deg); }
@@ -38,6 +38,8 @@
 .trending-rank-first { color: var(--champion); }
 .trending-trophy { width: 64px; height: 64px; flex-shrink: 0; object-fit: contain; }
 .trending-item-copy { flex: 1; min-width: 0; }
+.trending-item h3 a { color: var(--action); text-underline-offset: 4px; }
+.trending-item h3 a:hover { text-decoration: underline; }
 .trending-item h3 { margin: 0 0 10px; font-size: var(--type-lead); line-height: 1.4; overflow-wrap: anywhere; }
 .trending-item-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: var(--type-caption); line-height: 1.5; overflow-wrap: anywhere; }
 .trending-item-meta > span:last-child { color: var(--action); }

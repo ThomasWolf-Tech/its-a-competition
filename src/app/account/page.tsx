@@ -16,12 +16,12 @@ async function Account({ searchParams }: PageProps<"/account">) {
   if (profile.deactivated_at) return <section className="account-settings"><h1>Your account is deactivated.</h1><AccountLifecycle /></section>;
   const needsUsername = !profile.handle;
   return <>
-    <header className="account-heading"><div><span className="section-kicker">YOUR CORNER OF THE COMPETITION</span><h1>{needsUsername ? "Choose your username." : "Your account."}</h1><p>{needsUsername ? "One last step before you create brackets: pick a public username." : "Manage your username and sign-in details."}</p></div></header>
+    <header className="account-heading"><div><h1>{needsUsername ? "Choose a username" : "Account"}</h1>{needsUsername && <p>Choose a public username to continue.</p>}</div></header>
     {query.error === "signout" && <p className="auth-error" role="alert">We couldn’t sign you out. Please try again.</p>}
-    <section className="account-settings" aria-labelledby="profile-title"><h2 id="profile-title">Your public username</h2><UsernameForm username={profile.handle ? profile.display_name : ""} availableAt={profile.username_change_available_at} canChange={profile.canChangeUsername} next={needsUsername ? safeNext(query.next, "/account/brackets") : ""} /></section>
-    <section className="account-settings" aria-labelledby="signin-title"><h2 id="signin-title">Sign-in email</h2><p>{user.email}</p><p>Your email is private. Only your username is used as your public identity.</p></section>
+    <section className="account-settings" aria-labelledby="profile-title"><h2 id="profile-title">Public username</h2><UsernameForm username={profile.handle ? profile.display_name : ""} availableAt={profile.username_change_available_at} canChange={profile.canChangeUsername} next={needsUsername ? safeNext(query.next, "/account/brackets") : ""} /></section>
+    <section className="account-settings" aria-labelledby="signin-title"><h2 id="signin-title">Sign-in email</h2><p>{user.email}</p><p>Your email is private. Your username is public.</p></section>
     <section className="account-settings"><details><summary>Delete account</summary><AccountLifecycle /></details></section>
-    {!needsUsername && <Link href="/account/brackets" className="auth-textButton" prefetch={false}>My Brackets →</Link>}
+    {!needsUsername && <Link href="/account/brackets" className="auth-textButton" prefetch={false}>My brackets →</Link>}
     {!needsUsername && <Link href="/account/trophies" className="auth-textButton" prefetch={false}>Trophy room →</Link>}
   </>;
 }

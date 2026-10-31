@@ -4,7 +4,7 @@ import { formatDuration, type BracketSchedule, type BracketVisibility, type Sche
 import Icon from './icon';
 
 export function ScheduleReview({ schedule, count }: { schedule: BracketSchedule; count: number }) {
-  if (schedule.mode === 'manual') return <p className="builder-hint">You call the rounds. End each round when you’re ready.</p>;
+  if (schedule.mode === 'manual') return <p className="builder-hint">Only you can end each round.</p>;
   const names = roundNames(count);
   return <><ol className="builder-scheduleReview" aria-label="Round durations">{schedule.roundEndsAt.map((end, i) => <li key={i}><span className="builder-roundNumber">{String(i + 1).padStart(2, '0')}</span><strong>{names[i]}</strong><span>{formatDuration(Date.parse(end) - Date.parse(i ? schedule.roundEndsAt[i - 1] : schedule.startsAt))}</span></li>)}</ol><p className="builder-hint">Estimated competition length: {formatDuration(Date.parse(schedule.roundEndsAt.at(-1)!) - Date.parse(schedule.startsAt))}. Each round gets its full duration when it opens.</p></>;
 }
@@ -23,9 +23,9 @@ export default function BracketScheduleFields({ visibility, count, draft, setDra
     });
   }
   return <section className="builder-section" aria-labelledby="timing-heading">
-    <div className="builder-sectionTitle"><span>03</span><div><h2 id="timing-heading">Set the pace</h2><p>Give every rivalry its time in the spotlight.</p></div><Icon name="clock" /></div>
+    <div className="builder-sectionTitle"><div><h2 id="timing-heading">Round timing</h2></div><Icon name="clock" /></div>
     <fieldset className="builder-choiceGroup"><legend className="builder-choiceLegend">How will rounds end?</legend><div className="builder-timingChoices">
-      {(visibility === 'private' ? ['manual', 'per-round'] : ['per-round']).map(mode => <label className="builder-choice" key={mode}><input type="radio" name="timing-mode" checked={draft.mode === mode} onChange={() => setDraft(old => ({ ...old, mode: mode as ScheduleDraft['mode'] }))} /><Icon name={mode === 'manual' ? 'user' : 'clock'} /><span><strong>{mode === 'manual' ? 'I’ll end each round' : 'Run on a timer'}</strong><small>{mode === 'manual' ? 'Move things along when you’re ready.' : 'Choose a duration. We’ll handle the clock.'}</small></span></label>)}
+      {(visibility === 'private' ? ['manual', 'per-round'] : ['per-round']).map(mode => <label className="builder-choice" key={mode}><input type="radio" name="timing-mode" checked={draft.mode === mode} onChange={() => setDraft(old => ({ ...old, mode: mode as ScheduleDraft['mode'] }))} /><Icon name={mode === 'manual' ? 'user' : 'clock'} /><span><strong>{mode === 'manual' ? 'Manual' : 'Timed'}</strong><small>{mode === 'manual' ? 'End each round yourself.' : 'Rounds end automatically.'}</small></span></label>)}
     </div></fieldset>
     {draft.mode === 'per-round' && <>
       <label className="builder-customizeRounds"><input type="checkbox" checked={!!draft.customize} onChange={e => { const customize = e.target.checked; setDraft(old => ({ ...old, customize, roundMinutes: customize ? old.roundMinutes : Array(5).fill(old.roundMinutes?.[0] ?? 1440) })); }} /><span>Customize each round</span></label>
@@ -36,7 +36,7 @@ export default function BracketScheduleFields({ visibility, count, draft, setDra
       })}</div>
     </>}
     {error && <p id="schedule-error" className="builder-error" role="alert">{error}</p>}
-    {schedule && <div className="builder-schedulePreview"><h3>{schedule.mode === 'manual' ? 'You’re in control' : 'Your round durations'}</h3><ScheduleReview schedule={schedule} count={count} /></div>}
+    {schedule && <div className="builder-schedulePreview"><h3>{schedule.mode === 'manual' ? 'Manual rounds' : 'Round durations'}</h3><ScheduleReview schedule={schedule} count={count} /></div>}
     {visibility === 'public' && <p className="builder-lockNote"><Icon name="lock" /> Once submitted, round durations are locked. Public rounds cannot be ended early or reset.</p>}
   </section>;
 }
