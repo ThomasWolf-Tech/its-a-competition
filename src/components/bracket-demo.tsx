@@ -11,6 +11,10 @@ import { formatDeadline, type BracketSchedule, type BracketVisibility } from "@/
 import BracketScheduleCard from "./bracket-schedule-card";
 import { useRoundReveal, RoundClock, CountingOverlay, WinnerConfetti } from "./round-reveal";
 import BracketRules from "./bracket-rules";
+import BracketViewport from "./bracket-viewport";
+
+const COLUMN_WIDTH = 256;
+const COLUMN_GAP = 24;
 
 export function Trophy({ className = "" }: { className?: string }) {
   return <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -55,7 +59,7 @@ function Connectors({ round, rounds, width, height, winners, championId, tracing
   return <svg className="connectors" viewBox={`0 0 ${width} ${height}`} fill="none" aria-hidden="true">
     {Array.from({ length: rounds - 1 }, (_, level) => {
       const count = 2 ** (rounds - level - 2);
-      const x = 160 + level * 184;
+      const x = COLUMN_WIDTH + level * (COLUMN_WIDTH + COLUMN_GAP);
       return Array.from({ length: count }, (_, index) => {
         const y = (index + 0.5) * height / count;
         const targetY = count === 1 ? height / 2 : (Math.floor(index / 2) + 0.5) * height / (count / 2);
@@ -100,8 +104,9 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
   const final = rounds - 1;
   const sides = Array.from({ length: final }, (_, round) => ({ round, side: "left", title: names[round], subtitle: `${bracketSize(competitors.length) / 2 ** (round + 1)} slots` }));
   const columns = [...sides, { round: final, side: "center", title: "The final", subtitle: "1 champion" }, ...sides.map(column => ({ ...column, side: "right" })).reverse()];
-  const width = columns.length * 160 + (columns.length - 1) * 24;
-  const height = Math.max(608, bracketSize(competitors.length) / 4 * 140);
+  const width = columns.length * COLUMN_WIDTH + (columns.length - 1) * COLUMN_GAP;
+  const [{ matchHeight, championHeight }, setMeasurements] = useState({ matchHeight: 144, championHeight: 220 });
+  const height = Math.max(800, championHeight * 2 + matchHeight + 128, bracketSize(competitors.length) / 4 * Math.max(220, matchHeight + 40));
   const complete = state.round === rounds;
   const currentMatches = complete ? [] : getMatchups(state, state.round).filter(match => !state.winners[match.id]);
   const pickedCount = currentMatches.filter(match => state.picks[match.id]).length;
@@ -135,9 +140,8 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
           <span className="step-number">{state.round > index ? "✓" : `0${index + 1}`}</span><span>{name}</span>
         </div>)}
       </div>
-      <div className="scroll-hint">Swipe or scroll to explore the full bracket <span aria-hidden="true">↔</span></div>
-      <div className="board-scroll" tabIndex={0} role="region" aria-label="Full bracket; scroll horizontally to see both sides">
-        <div className="bracket-canvas" style={{ "--bracket-width": `${width}px`, "--bracket-height": `${height}px`, "--bracket-columns": columns.length } as CSSProperties}>
+      <BracketViewport sizeKey={competitors.length} onMeasure={setMeasurements}>
+        <div className="bracket-canvas" style={{ "--bracket-width": `${width}px`, "--bracket-height": `${height}px`, "--bracket-columns": columns.length, "--bracket-column-width": `${COLUMN_WIDTH}px`, "--bracket-match-height": `${matchHeight}px` } as CSSProperties}>
           {rounds > 1 && <div className="side-labels"><span>THE WEST SIDE</span><span>THE EAST SIDE</span></div>}
           <div className="column-headings">{columns.map((column, index) => <div key={index} className={state.round === column.round ? "heading-active" : ""}><span>{column.title}</span><small>{column.subtitle}</small></div>)}</div>
           <div className="bracket-tree"><Connectors round={state.round} rounds={rounds} width={width} height={height} winners={state.winners} championId={champion?.id} tracing={reveal.phase === "tracing"} />
@@ -157,7 +161,7 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
             })}
           </div>
         </div>
-      </div>
+      </BracketViewport>
       <div className="round-controls">
         <div className="round-status" role="status" aria-live="polite" aria-atomic="true">
           <span className={`status-icon${complete ? " complete" : ""}`} aria-hidden="true">{complete ? "★" : "↗"}</span>

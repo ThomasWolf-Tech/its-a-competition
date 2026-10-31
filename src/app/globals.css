@@ -127,7 +127,7 @@ h1 > span { color: var(--action); }
 .match-wrap { position: relative; }
 .match-card { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
 .match-active .match-card { border-color: var(--action); box-shadow: 0 2px 4px transparent; }
-.competitor-row { border: 0; padding: 9px 8px; height: 56px; width: 100%; display: flex; align-items: center; gap: 7px; text-align: left; background: var(--surface); color: var(--ink); transition: background 140ms, box-shadow 140ms; }
+.competitor-row { border: 0; padding: 9px 8px; min-height: 72px; width: 100%; display: flex; align-items: center; gap: 7px; text-align: left; background: var(--surface); color: var(--ink); transition: background 140ms, box-shadow 140ms; }
 .competitor-row + .competitor-row { border-top: 1px solid var(--line); }
 .competitor-row:enabled:hover { background: var(--selected); }
 .competitor-row:focus-visible { position: relative; z-index: 1; outline-offset: -3px; }
@@ -143,7 +143,7 @@ h1 > span { color: var(--action); }
 .avatar-gold { color: var(--champion); background: var(--champion-tint); }
 .avatar-pending { background: var(--surface-soft); color: var(--muted); font-size: var(--type-body); }
 .competitor-image { object-fit: cover; }
-.competitor-name { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; flex: 1; font-size: var(--type-fine); line-height: 1.35; font-weight: 550; min-width: 0; overflow-wrap: anywhere; }
+.competitor-name { flex: 1; font-size: var(--type-small); line-height: 1.45; white-space: normal; word-break: normal; font-weight: 550; min-width: 0; overflow-wrap: anywhere; }
 .vote-mark { flex-shrink: 0; width: 15px; height: 15px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; font-size: var(--type-fine); }
 .vote-mark.checked { border-color: var(--action); background: var(--action); color: var(--on-action); }
 .pending { padding-left: 11px; color: var(--muted); gap: 8px; font-size: var(--type-fine); }
@@ -154,7 +154,7 @@ h1 > span { color: var(--action); }
 .trophy-medallion { width: 74px; height: 82px; display: grid; place-items: center; color: var(--champion); background: var(--champion-tint); border: 1px solid var(--champion-line); border-radius: 35px 35px 28px 28px; margin-bottom: 17px; }
 .trophy-medallion > svg { height: 38px; width: 38px; }
 .champion-label { font-size: var(--type-fine); letter-spacing: 1.8px; color: var(--champion); margin-bottom: 10px; }
-.champion-display > strong { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 19px; font-style: italic; letter-spacing: -0.5px; }
+.champion-display > strong { max-width: 100%; overflow-wrap: anywhere; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 19px; font-style: italic; letter-spacing: -0.5px; }
 .champion-caption { font-size: var(--type-fine); color: var(--muted); margin-top: 7px; }
 .avatar-large { width: 64px; height: 64px; border-radius: 28px; font-size: 20px; }
 .crowned .trophy-medallion { background: var(--selected); border-color: var(--champion-line); }
@@ -544,11 +544,11 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 
 /* Bracket dimensions follow the selected competitor count. */
 .bracket-canvas { width: var(--bracket-width, 1264px); }
-.column-headings, .bracket-tree { grid-template-columns: repeat(var(--bracket-columns, 7), 160px); }
+.column-headings, .bracket-tree { grid-template-columns: repeat(var(--bracket-columns, 7), var(--bracket-column-width, 256px)); }
 .bracket-tree { height: var(--bracket-height, 608px); }
 .connectors { height: 100%; }
-.champion-display { top: calc(50% - 290px); }
-.final-caption { top: calc(50% + 108px); }
+.champion-display { top: auto; bottom: calc(50% + var(--bracket-match-height, 144px) / 2 + 32px); }
+.final-caption { top: calc(50% + var(--bracket-match-height, 144px) / 2 + 32px); }
 .trophy-medallion.trophy-art { background: transparent; border: 0; border-radius: 0; width: 112px; height: 112px; margin-bottom: 8px; }
 .competition-heading h1 { overflow-wrap: anywhere; }
 
@@ -813,3 +813,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 }
 
 .draft-list[aria-labelledby="saved-title"] > p { max-width: 65ch; margin: 8px 0 20px; }
+
+.board-scroll { touch-action: auto; }
+@media (pointer: fine) { .board-scroll { cursor: grab; } .board-scroll .bracket-canvas { user-select: none; } }
+.board-scroll.is-dragging, .board-scroll.is-dragging * { cursor: grabbing !important; }
