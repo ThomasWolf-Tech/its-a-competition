@@ -106,7 +106,7 @@ export function durationTiming(draft: ScheduleDraft, now: number): ScheduleDraft
   const deadlines = draftRoundDeadlines(draft, 5, now);
   const minutes = Array.from({ length: 5 }, (_, i) => draft.roundMinutes?.[i] ??
     (draft.roundHours?.[i] ? Math.round(Number(draft.roundHours[i]) * 60) :
-    Number.isFinite(deadlines[i]) ? Math.max(1, Math.round((deadlines[i] - (i ? deadlines[i - 1] : now)) / MINUTE)) : 1440));
+    Number.isFinite(deadlines[i]) ? Math.max(1, Math.round((deadlines[i] - (i ? deadlines[i - 1] : now)) / MINUTE)) : 0));
   return { mode: draft.mode === 'manual' ? 'manual' : draft.mode ? 'per-round' : '', endDate: '', roundEndsAt: [], roundMinutes: minutes, customize: draft.customize ?? minutes.some(n => n !== minutes[0]) };
 }
 

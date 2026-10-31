@@ -15,6 +15,7 @@ import BracketViewport from "./bracket-viewport";
 
 const COLUMN_WIDTH = 256;
 const COLUMN_GAP = 24;
+export type FinalVoteTotals = Record<string, Record<string, number>>;
 
 export function Trophy({ className = "" }: { className?: string }) {
   return <svg className={className} width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -29,7 +30,7 @@ function Avatar({ competitor, large = false }: { competitor: Competitor; large?:
   </span>;
 }
 
-function MatchCard({ match, state, dispatch, votingClosed = false, disabled = false, championId }: { championId?: string; match: Matchup; state: BracketState; dispatch: Dispatch<BracketAction>; votingClosed?: boolean; disabled?: boolean }) {
+function MatchCard({ match, state, dispatch, votingClosed = false, disabled = false, championId, finalVotes }: { championId?: string; match: Matchup; state: BracketState; dispatch: Dispatch<BracketAction>; votingClosed?: boolean; disabled?: boolean; finalVotes?: Record<string, number> }) {
   const bye = match.round === 0 && match.competitors.filter(Boolean).length === 1;
   const active = match.round === state.round && !bye && !votingClosed;
   const done = match.round < state.round;
@@ -43,10 +44,12 @@ function MatchCard({ match, state, dispatch, votingClosed = false, disabled = fa
         </div>;
         const winner = state.winners[match.id] === competitor.id;
         const selected = done ? winner : picked === competitor.id || (bye && winner);
+        const votes = done ? finalVotes?.[competitor.id] : undefined;
+        const voteLabel = votes === undefined ? '' : `${votes.toLocaleString('en-US')} ${votes === 1 ? 'vote' : 'votes'}`;
         return <button type="button" className={`competitor-row${selected ? " selected" : ""}${done && !winner ? " eliminated" : ""}${competitor.id === championId ? " champion-entrant" : ""}`} key={competitor.id}
-          disabled={!active || disabled} aria-pressed={selected} aria-label={`${active ? "Vote for" : winner ? "Winner:" : done ? "Eliminated:" : "Competitor:"} ${competitor.name}`}
+          disabled={!active || disabled} aria-pressed={selected} aria-label={`${active ? "Vote for" : winner ? "Winner:" : done ? "Eliminated:" : "Competitor:"} ${competitor.name}${voteLabel ? `, ${voteLabel}` : ''}`}
           onClick={() => dispatch({ type: "vote", matchId: match.id, competitorId: competitor.id })}>
-          <span className="seed">{competitor.seed}</span><Avatar competitor={competitor} /><span className="competitor-name" title={competitor.name}>{competitor.name}</span>
+          <span className="seed">{competitor.seed}</span><Avatar competitor={competitor} /><span className="competitor-copy"><span className="competitor-name" title={competitor.name}>{competitor.name}</span>{voteLabel && <span className="competitor-votes">{voteLabel}</span>}</span>
           <span className={`vote-mark${selected ? " checked" : ""}`} aria-hidden="true">{selected ? "✓" : ""}</span>
         </button>;
       })}
@@ -73,7 +76,7 @@ function Connectors({ round, rounds, width, height, winners, championId, tracing
   </svg>;
 }
 
-export default function BracketDemo({ competitors = COMPETITORS, title, trophyId = "crown", description, category, progressId = "demo", visibility, schedule, controlled, results }: { results?: ReactNode; competitors?: Competitor[]; title?: string; trophyId?: string; description?: string; category?: string; progressId?: string; visibility?: BracketVisibility; schedule?: BracketSchedule; controlled?: { state: BracketState; dispatch: Dispatch<BracketAction>; canEndRound: boolean; pending: boolean; votingEnabled: boolean; closing?: boolean; pollError?: string; onRetry?: () => void; clockOffset?: number } }) {
+export default function BracketDemo({ competitors = COMPETITORS, title, trophyId = "crown", description, category, progressId = "demo", visibility, schedule, controlled, results }: { results?: ReactNode; competitors?: Competitor[]; title?: string; trophyId?: string; description?: string; category?: string; progressId?: string; visibility?: BracketVisibility; schedule?: BracketSchedule; controlled?: { state: BracketState; dispatch: Dispatch<BracketAction>; canEndRound: boolean; pending: boolean; votingEnabled: boolean; closing?: boolean; pollError?: string; clockOffset?: number; finalVotes?: FinalVoteTotals } }) {
   const local = useBracketProgress(progressId, competitors, !controlled);
   const { state: source, dispatch: send } = controlled ?? local;
   const [localRevealRound, setLocalRevealRound] = useState<number | null>(null);
@@ -129,7 +132,7 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
     </section>
     {visibility && schedule && <BracketScheduleCard visibility={visibility} schedule={schedule} count={competitors.length} shared={!!controlled} />}
     <section className={`tournament reveal-${reveal.phase}`} aria-busy={busy} aria-label={`${competitors.length}-competitor competition bracket`}>
-      {(reveal.holding || controlled?.closing || (controlled && votingClosed && !complete)) && <CountingOverlay error={controlled?.pollError} onRetry={controlled?.onRetry} />}
+      {(reveal.holding || controlled?.closing || (controlled && votingClosed && !complete)) && <CountingOverlay error={controlled?.pollError} />}
       <div className="tournament-toolbar">
         <div className="bracket-tab"><Icon name="bracket" className="bracket-small" /> The bracket <span className="format-pill">Single elimination</span></div>
         <div className="bracket-toolbarActions"><div className="legend"><span className="legend-dot" /> {complete ? "Competition complete" : votingClosed ? "Voting closed" : "Pick a competitor to vote"}</div><BracketRules visibility={visibility} schedule={schedule} shared={Boolean(controlled)} /></div>
@@ -140,28 +143,6 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
           <span className="step-number">{state.round > index ? "✓" : `0${index + 1}`}</span><span>{name}</span>
         </div>)}
       </div>
-      <BracketViewport sizeKey={competitors.length} onMeasure={setMeasurements}>
-        <div className="bracket-canvas" style={{ "--bracket-width": `${width}px`, "--bracket-height": `${height}px`, "--bracket-columns": columns.length, "--bracket-column-width": `${COLUMN_WIDTH}px`, "--bracket-match-height": `${matchHeight}px` } as CSSProperties}>
-          {rounds > 1 && <div className="side-labels"><span>THE WEST SIDE</span><span>THE EAST SIDE</span></div>}
-          <div className="column-headings">{columns.map((column, index) => <div key={index} className={state.round === column.round ? "heading-active" : ""}><span>{column.title}</span><small>{column.subtitle}</small></div>)}</div>
-          <div className="bracket-tree"><Connectors round={state.round} rounds={rounds} width={width} height={height} winners={state.winners} championId={champion?.id} tracing={reveal.phase === "tracing"} />
-            {columns.map((column, index) => {
-              const all = getMatchups(state, column.round);
-              const matches = column.side === "center" ? all : column.side === "left" ? all.slice(0, all.length / 2) : all.slice(all.length / 2);
-              return <div key={index} className={`bracket-column${column.side === "center" ? " final-column" : ""}`}>
-                {column.side === "center" && <div className={`champion-display${champion ? " crowned" : ""}`}>
-                  <div className="trophy-medallion trophy-art"><Image src={trophy.src} alt={trophy.name} width={112} height={112} /></div>
-                  <span className="champion-label">{champion ? "CHAMPION" : "THE CROWN AWAITS"}</span>
-                  <strong>{champion ? champion.name : "Awaiting the final"}</strong>
-                  <span className="champion-caption">{champion ? "Bragging rights secured." : ""}</span>
-                </div>}
-                {matches.map((match, matchIndex) => <div className={`match-position${match.round === state.round && reveal.phase !== "idle" ? " advancing-match" : ""}`} key={match.id} style={{ top: `${(matchIndex + 0.5) * 100 / matches.length}%` }}><MatchCard match={match} state={state} dispatch={dispatch} votingClosed={votingClosed} championId={champion?.id} disabled={busy || Boolean(controlled && (!controlled.votingEnabled || controlled.pending))} /></div>)}
-                {column.side === "center" && <div className="final-caption">{complete ? "THAT SETTLES IT." : ""}<span aria-hidden="true">✳</span></div>}
-              </div>;
-            })}
-          </div>
-        </div>
-      </BracketViewport>
       <div className="round-controls">
         <div className="round-status" role="status" aria-live="polite" aria-atomic="true">
           <span className={`status-icon${complete ? " complete" : ""}`} aria-hidden="true">{complete ? "★" : "↗"}</span>
@@ -173,6 +154,28 @@ export default function BracketDemo({ competitors = COMPETITORS, title, trophyId
           <button type="button" className="advance-button" disabled={!ready || busy} onClick={() => dispatch({ type: "advance" })}>{complete ? "Competition complete" : manual ? state.round === final ? "End final & crown winner" : "End round" : state.round === final ? "Crown the winner" : "Advance round"}<span aria-hidden="true">{complete ? "✓" : "→"}</span></button>
         </div>}
       </div>
+      <BracketViewport sizeKey={competitors.length} onMeasure={setMeasurements}>
+        <div className="bracket-canvas" style={{ "--bracket-width": `${width}px`, "--bracket-height": `${height}px`, "--bracket-columns": columns.length, "--bracket-column-width": `${COLUMN_WIDTH}px`, "--bracket-match-height": `${matchHeight}px` } as CSSProperties}>
+          {rounds > 1 && <div className="side-labels"><span>THE WEST SIDE</span><span>THE EAST SIDE</span></div>}
+          <div className="column-headings">{columns.map((column, index) => <div key={index} className={state.round === column.round ? "heading-active" : ""}><span>{column.title}</span><small>{column.subtitle}</small></div>)}</div>
+          <div className="bracket-tree"><Connectors round={state.round} rounds={rounds} width={width} height={height} winners={state.winners} championId={champion?.id} tracing={reveal.phase === "tracing"} />
+            {columns.map((column, index) => {
+              const all = getMatchups(state, column.round);
+              const matches = column.side === "center" ? all : column.side === "left" ? all.slice(0, all.length / 2) : all.slice(all.length / 2);
+              return <div key={index} className={`bracket-column${column.side === "center" ? " final-column" : ""}`}>
+                {column.side === "center" && <div className={`champion-display${champion ? " crowned" : ""}`}>
+                  <div className="trophy-medallion trophy-art"><Image src={trophy.src} alt={trophy.name} width={122} height={122} /></div>
+                  <span className="champion-label">{champion ? "CHAMPION" : "THE CROWN AWAITS"}</span>
+                  <strong>{champion ? champion.name : "Awaiting the final"}</strong>
+                  <span className="champion-caption">{champion ? "Bragging rights secured." : ""}</span>
+                </div>}
+                {matches.map((match, matchIndex) => <div className={`match-position${match.round === state.round && reveal.phase !== "idle" ? " advancing-match" : ""}`} key={match.id} style={{ top: `${(matchIndex + 0.5) * 100 / matches.length}%` }}><MatchCard match={match} state={state} dispatch={dispatch} votingClosed={votingClosed} championId={champion?.id} finalVotes={controlled?.finalVotes?.[match.id]} disabled={busy || Boolean(controlled && (!controlled.votingEnabled || controlled.pending))} /></div>)}
+                {column.side === "center" && <div className="final-caption">{complete ? "THAT SETTLES IT." : ""}<span aria-hidden="true">✳</span></div>}
+              </div>;
+            })}
+          </div>
+        </div>
+      </BracketViewport>
       {results}
     </section>
     <div className="demo-note"><span aria-hidden="true">ⓘ</span> {controlled ? "Your votes are saved to your account until the round closes. Final results are kept; individual votes are then removed." : <>{title ? "A local preview, not a published competition." : "A practice bracket with fictional teams."} Picks and round progress stay in this browser tab.{!timed && " Reset to play again."}</>}</div>

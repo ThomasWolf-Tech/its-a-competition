@@ -60,6 +60,14 @@
 .builder-submit { width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; border-radius: 8px; background: var(--action); color: var(--on-action); padding: 15px 10px; font-size: var(--type-ui); font-weight: 750; cursor: pointer; }
 .builder-submit:hover { filter: brightness(1.08); }
 .builder-submit svg { width: 18px; height: 18px; }
+.builder-summaryActions { display: grid; gap: 12px; max-width: 360px; margin-inline: auto; }
+.builder-save { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 47px; padding: 12px 14px; border: 1px solid var(--control-border); border-radius: 8px; background: transparent; color: var(--action); font: inherit; font-size: var(--type-ui); font-weight: 650; cursor: pointer; }
+.builder-save:hover { background: var(--background); }
+.builder-previewLink { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; margin-top: 12px; padding: 8px 4px; border: 0; background: transparent; color: var(--action); font: inherit; font-size: var(--type-ui); font-weight: 650; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.builder-previewLink svg { width: 18px; height: 18px; }
+.builder-previewLink:hover { text-decoration-thickness: 2px; }
+.builder-save:disabled, .builder-previewLink:disabled { opacity: .5; cursor: default; }
+.builder-save:disabled:hover { background: transparent; }
 .builder-localNote { color: var(--muted); font-size: var(--type-caption); line-height: 1.8; margin: 15px 0 0; }
 .builder-error { color: var(--champion); font-size: var(--type-small); line-height: 1.5; }
 .builder-miniBracket { position: absolute; top: 105px; left: 22px; right: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 22px 100px; opacity: .4; }

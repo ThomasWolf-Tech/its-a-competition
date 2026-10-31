@@ -11,6 +11,7 @@ import { TROPHIES, TROPHY_CATEGORIES, getTrophy } from "@/lib/trophies";
 import { useBracketConfig } from "@/lib/use-bracket-config";
 import { createSchedule, durationTiming, localDateTime, type BracketVisibility, type BracketSchedule, type ScheduleDraft } from "@/lib/bracket-schedule";
 import BracketScheduleFields from "./bracket-schedule-fields";
+import BoundedNumberInput from "./bounded-number-input";
 import { saveDraft, submitForReview } from "@/app/create/actions";
 import { storedTiming, editorTiming, type SavedDraft } from "@/lib/bracket-draft";
 import { bracketContentError, contentError } from "@/lib/content-policy";
@@ -53,6 +54,7 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
   const [conflict, setConflict] = useState(false);
   async function persistDraft() {
     if (saveInFlight.current || conflict) return;
+    if (!validateNumbers()) return;
     const contentMessage = bracketContentError(title, description, names.slice(0, count));
     if (contentMessage) {
       setSaveError(contentMessage); setSavedMessage("");
@@ -79,6 +81,7 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
 
   async function submitCompetition() {
     setSubmitted(true); setSaveError(""); setTimingError("");
+    if (!validateNumbers()) return;
     if (!visibility || Object.keys(configErrors(config)).length) { focusInvalidField(); return; }
     // Submission is an event handler; validate against the current instant.
     // eslint-disable-next-line react-hooks/purity
@@ -99,8 +102,6 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
 
   const config = { title, description, category: bracketCategory, names: names.slice(0, count), trophyId };
   const fingerprint = JSON.stringify({ ...config, visibility, timing });
-  const [initialFingerprint] = useState(fingerprint);
-  const dirty = fingerprint !== (savedFingerprint || initialFingerprint);
   const errors = configErrors(config);
   const titleError = (submitted && errors.title) || (saveError.startsWith("Bracket name:") ? saveError : "");
   const descriptionError = (submitted && errors.description) || (saveError.startsWith("Description:") ? saveError : "");
@@ -110,6 +111,13 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
   const trophy = getTrophy(trophyId);
   const filled = config.names.filter(name => name.trim()).length;
   const byes = bracketSize(count) - count;
+  function validateNumbers() {
+    const invalid = form.current?.querySelector<HTMLInputElement>('input[type="number"]:invalid');
+    if (!invalid) return true;
+    invalid.focus();
+    invalid.reportValidity();
+    return false;
+  }
   function focusInvalidField(scheduleInvalid = false) {
     // Let the error descriptions render before moving focus to their control.
     requestAnimationFrame(() => {
@@ -132,6 +140,7 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
   }
   const submit = (event: FormEvent) => {
     event.preventDefault(); setSubmitted(true); setStorageError(""); setTimingError("");
+    if (!validateNumbers()) return;
     // This is an event handler; schedules start at submission, not render time.
     // eslint-disable-next-line react-hooks/purity
     const submittedAt = Date.now();
@@ -153,7 +162,7 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
   return <div className="builder-shell">
     <Link href="/account/brackets" className="builder-back" prefetch={false}>← My brackets</Link>
     <header className="builder-heading"><h1>{draft ? "Edit draft" : "Create a bracket"}</h1></header>
-    <form ref={form} onSubmit={submit} noValidate className="builder-layout">
+    <form ref={form} onSubmit={submit} noValidate autoComplete="off" className="builder-layout">
       <div className="builder-sections">
         <section className="builder-section" aria-labelledby="visibility-heading">
           <div className="builder-sectionTitle"><div><h2 id="visibility-heading">Visibility</h2></div><Icon name="globe" /></div>
@@ -167,10 +176,10 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
         {visibility && <>
         <section className="builder-section" aria-labelledby="basics-heading">
           <div className="builder-sectionTitle"><div><h2 id="basics-heading">Bracket details</h2></div><Icon name="bracket" /></div>
-          <div className="builder-field"><label htmlFor="bracket-name">Bracket name <span>Required</span></label><input id="bracket-name" required placeholder="The ultimate snack showdown" minLength={TITLE_MIN} maxLength={TITLE_LIMIT} value={title} onChange={event => { setTitle(event.target.value); if (!conflict) setSaveError(""); }} aria-invalid={Boolean(titleError)} aria-describedby={`title-count ${titleError ? "title-error" : "title-hint"}`} /><div className="builder-fieldFoot"><span>{titleError ? <span id="title-error" className="builder-error">{titleError}</span> : <span id="title-hint">{TITLE_MIN}–{TITLE_LIMIT} characters.</span>}</span><span id="title-count">{title.length}/{TITLE_LIMIT}</span></div></div>
+          <div className="builder-field"><label htmlFor="bracket-name">Bracket name <span>Required</span></label><input id="bracket-name" autoComplete="off" required placeholder="The ultimate snack showdown" minLength={TITLE_MIN} maxLength={TITLE_LIMIT} value={title} onChange={event => { setTitle(event.target.value); if (!conflict) setSaveError(""); }} aria-invalid={Boolean(titleError)} aria-describedby={`title-count ${titleError ? "title-error" : "title-hint"}`} /><div className="builder-fieldFoot"><span>{titleError ? <span id="title-error" className="builder-error">{titleError}</span> : <span id="title-hint">{TITLE_MIN}–{TITLE_LIMIT} characters.</span>}</span><span id="title-count">{title.length}/{TITLE_LIMIT}</span></div></div>
           <div className="builder-field builder-descriptionField"><label htmlFor="bracket-description">Short description <span>Optional</span></label><textarea id="bracket-description" rows={3} maxLength={DESCRIPTION_LIMIT} value={description} onChange={event => { setDescription(event.target.value); if (!conflict) setSaveError(""); }} placeholder="What is this competition about?" aria-invalid={Boolean(descriptionError)} aria-describedby={`description-hint description-count${descriptionError ? " description-error" : ""}`} /><div className="builder-fieldFoot"><span id="description-hint">Shown on your bracket page.</span><span id="description-count">{description.length}/{DESCRIPTION_LIMIT}</span></div>{descriptionError && <p id="description-error" className="builder-error">{descriptionError}</p>}</div>
           <div className="builder-field builder-categoryField"><label htmlFor="bracket-category">Bracket category</label><select id="bracket-category" value={bracketCategory} onChange={event => setBracketCategory(event.target.value as BracketCategory)} aria-invalid={submitted && Boolean(errors.category)} aria-describedby="category-hint"><option disabled value="">Choose a category</option>{BRACKET_CATEGORIES.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select><p id="category-hint" className="builder-hint">Choose Everything Else if no category fits.</p></div>
-          <div className="builder-countRow"><div className="builder-field"><label htmlFor="competitor-count">Number of competitors</label><select id="competitor-count" value={count} onChange={event => setCount(Number(event.target.value))}>{Array.from({ length: 31 }, (_, index) => index + 2).map(number => <option key={number} value={number}>{number} competitors</option>)}</select></div><p>{roundNames(count).length} {roundNames(count).length === 1 ? "round" : "rounds"} · Single elimination<br /><span>{byes ? `${byes} automatic first-round ${byes === 1 ? "bye" : "byes"}.` : "No first-round byes."}</span></p></div>
+          <div className="builder-countRow"><div className="builder-field"><label htmlFor="competitor-count">Number of competitors</label><BoundedNumberInput id="competitor-count" value={count} min={2} max={32} onChange={setCount} describedBy="competitor-count-hint" /><span id="competitor-count-hint" className="builder-hint">2–32 competitors.</span></div><p>{roundNames(count).length} {roundNames(count).length === 1 ? "round" : "rounds"} · Single elimination<br /><span>{byes ? `${byes} automatic first-round ${byes === 1 ? "bye" : "byes"}.` : "No first-round byes."}</span></p></div>
         </section>
         <BracketScheduleFields visibility={visibility} count={count} draft={timing} setDraft={value => { setTiming(value); setTimingError(""); }} previewStart={previewStart} schedule={schedule} error={timingError} />
         <section className="builder-section" aria-labelledby="competitors-heading">
@@ -181,7 +190,7 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
           <div className="builder-competitorGrid">{config.names.map((name, index) => {
             const duplicate = Boolean(name.trim()) && config.names.some((other, otherIndex) => index !== otherIndex && other.trim().toLocaleLowerCase() === name.trim().toLocaleLowerCase());
             const invalid = (submitted && (!name.trim() || duplicate || Boolean(contentError(name, "competitor", `Competitor ${index + 1}`)))) || Boolean(namesError?.startsWith(`Competitor ${index + 1}:`));
-            return <div key={index} className="builder-competitorField"><label htmlFor={`competitor-${index}`}><span className="builder-seed">{String(index + 1).padStart(2, "0")}</span><span>Competitor {index + 1}</span></label><input id={`competitor-${index}`} required placeholder={`Name competitor ${index + 1}`} maxLength={COMPETITOR_LIMIT} value={name} aria-invalid={invalid} aria-describedby={`count-${index}${invalid ? " names-error" : ""}`} onChange={event => { setNames(previous => previous.map((value, nameIndex) => nameIndex === index ? event.target.value : value)); if (!conflict) setSaveError(""); }} /><span id={`count-${index}`} className="builder-counter">{name.length}/{COMPETITOR_LIMIT}</span></div>;
+            return <div key={index} className="builder-competitorField"><label htmlFor={`competitor-${index}`}><span className="builder-seed">{String(index + 1).padStart(2, "0")}</span><span>Competitor {index + 1}</span></label><input id={`competitor-${index}`} autoComplete="off" required placeholder={`Name competitor ${index + 1}`} maxLength={COMPETITOR_LIMIT} value={name} aria-invalid={invalid} aria-describedby={`count-${index}${invalid ? " names-error" : ""}`} onChange={event => { setNames(previous => previous.map((value, nameIndex) => nameIndex === index ? event.target.value : value)); if (!conflict) setSaveError(""); }} /><span id={`count-${index}`} className="builder-counter">{name.length}/{COMPETITOR_LIMIT}</span></div>;
           })}</div>
         </section>
         <section className="builder-section" aria-labelledby="trophy-heading">
@@ -203,14 +212,14 @@ function BuilderForm({ initial, draft }: { initial: BracketConfig | null; draft:
         {description.trim() && <p className="builder-summaryDescription">{description.trim()}</p>}
         <div className="builder-summaryStats"><div><strong>{count}</strong><span>competitors</span></div><div><strong>{roundNames(count).length}</strong><span>{roundNames(count).length === 1 ? "round" : "rounds"}</span></div><div><strong>1</strong><span>winner</span></div></div>
         <div className="builder-readiness"><Icon name={!visibility ? "globe" : filled === count ? "check" : "user"} /><span>{!visibility ? "Choose private or public to get started." : filled === count ? "All competitors named." : `${count - filled} ${count - filled === 1 ? "competitor needs" : "competitors need"} a name.`}</span></div>
-        <button className="builder-submit" type="button" disabled={saving || conflict} onClick={submitCompetition}>{submitting ? "Submitting…" : "Submit for review"} <Icon name="check" /></button>
-        <button className="reset-button" type="button" disabled={saving || conflict} onClick={persistDraft}>{saving && !submitting ? "Saving…" : "Save draft"}</button>
+        <div className="builder-summaryActions">
+          <button className="builder-submit" type="button" disabled={saving || conflict} onClick={submitCompetition}>{submitting ? "Submitting…" : "Submit for review"} <Icon name="check" /></button>
+          <button className="builder-save" type="button" disabled={saving || conflict} onClick={persistDraft}>{saving && !submitting ? "Saving…" : "Save draft"}</button>
+        </div>
         {savedMessage && savedFingerprint === fingerprint && <p className="builder-saveMessage" role="status">{savedMessage}</p>}
-        {dirty && <p className="builder-localNote" role="status">Unsaved changes.</p>}
-        {!savedId && !dirty && <p className="builder-localNote">Not saved to your account.</p>}
         {saveError && <p className="builder-error" role="alert">{saveError}</p>}
         {conflict && <a className="builder-back" href={`/create?draft=${savedId}`}>Reload saved draft →</a>}
-        <button className="reset-button" type="submit" disabled={!visibility || saving}>Preview bracket <Icon name="arrow" /></button>
+        <button className="builder-previewLink" type="submit" disabled={!visibility || saving}>Preview bracket <Icon name="arrow" /></button>
         {submitted && (!visibility || Object.keys(errors).length > 0 || timingError) && <p className="builder-error" role="alert">Complete the marked fields before submitting or previewing.</p>}
         {storageError && <p className="builder-error" role="alert">{storageError}</p>}
         <p className="builder-localNote">Submission sends your bracket for review. Voting starts automatically after approval. Previews stay in this browser tab.</p>

@@ -1,8 +1,11 @@
 'use client';
 import { useEffect, useLayoutEffect, useEffectEvent, useRef, useState, type CSSProperties } from 'react';
 import Image from 'next/image';
+import localFont from 'next/font/local';
 import type { BracketState } from '@/lib/bracket';
-import { formatDuration } from '@/lib/bracket-schedule';
+import Icon from './icon';
+
+const clockFont = localFont({ src: './fonts/chakra-petch-latin-700.woff2', weight: '700', style: 'normal', display: 'swap', preload: false, fallback: ['Arial'] });
 
 export function useRoundReveal(source: BracketState, enabled = true) {
   const [view, setView] = useState(source);
@@ -29,9 +32,16 @@ export function useRoundReveal(source: BracketState, enabled = true) {
 }
 export function RoundClock({ deadline, now, preview = false }: { deadline: string; now: number; preview?: boolean }) {
   const remaining = Date.parse(deadline) - now;
-  return <div className={`round-clock${remaining <= 60_000 ? ' round-clock-urgent' : ''}`} aria-label="Round countdown"><span>{remaining <= 0 ? 'VOTING CLOSED' : 'ROUND ENDS IN'}</span><strong>{remaining <= 0 ? preview ? 'Preview voting closed' : 'Awaiting results' : remaining < 60_000 ? 'Less than a minute' : formatDuration(remaining)}</strong></div>;
+  const closed = remaining <= 0;
+  const urgent = !closed && remaining <= 60_000;
+  const minutes = Math.max(0, Math.floor(remaining / 60_000));
+  const parts = [Math.floor(minutes / 1440), Math.floor(minutes % 1440 / 60), minutes % 60];
+  return <div className={`${clockFont.className} round-clock${urgent ? ' round-clock-urgent' : ''}${closed ? ' round-clock-closed' : ''}`} aria-label="Round countdown">
+    <span className="round-clock-label"><Icon name={closed ? 'check' : 'clock'} />{closed ? 'VOTING CLOSED' : 'ROUND ENDS IN'}</span>
+    {remaining >= 60_000 ? <strong className="round-clock-time">{(['days', 'hours', 'min'] as const).map((unit, index) => <span className="round-clock-unit" key={unit}><span>{String(parts[index]).padStart(2, '0')}</span><small>{unit}</small></span>)}</strong> : <strong>{closed ? preview ? 'Preview voting closed' : 'Awaiting results' : 'Less than a minute'}</strong>}
+  </div>;
 }
-export function CountingOverlay({ error, onRetry }: { error?: string; onRetry?: () => void }) {
+export function CountingOverlay({ error }: { error?: string }) {
   const overlay = useRef<HTMLDivElement>(null);
   const card = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
@@ -49,7 +59,7 @@ export function CountingOverlay({ error, onRetry }: { error?: string; onRetry?: 
     window.addEventListener('resize', position);
     return () => { window.removeEventListener('scroll', position, true); window.removeEventListener('resize', position); };
   }, []);
-  return <div ref={overlay} className="round-counting" role="status" aria-live="polite"><div ref={card} className="round-counting-card"><Image className="counting-logo" src="/brand/rally-relic-trophy-v2.png" alt="" width={128} height={128} /><h2>Finalizing results</h2><p>{error || 'Voting is closed while results are finalized.'}</p>{onRetry && <button type="button" className="auth-textButton" onClick={onRetry}>Check results</button>}</div></div>;
+  return <div ref={overlay} className="round-counting" role="status" aria-live="polite"><div ref={card} className="round-counting-card"><Image className="counting-logo" src="/brand/rally-relic-trophy-v2.png" alt="" width={128} height={128} /><h2>Finalizing results</h2><p>{error || 'Voting is closed while results are finalized.'}</p></div></div>;
 }
 export function WinnerConfetti() {
   return <div className="winner-confetti" aria-hidden="true">{Array.from({ length: 72 }, (_, i) => <i key={i} style={{ '--x': `${(i * 37) % 101}%`, '--drift': `${((i * 53) % 240) - 120}px`, '--delay': `${i % 9 * 35}ms`, '--turn': `${180 + i * 47}deg`, '--confetti-color': ['#F4D04E','#65B8FF','#F5F7FA'][i % 3] } as CSSProperties} />)}</div>;

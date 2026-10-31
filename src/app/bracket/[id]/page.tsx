@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: PageProps<'/bracket/[id]'>): 
     robots: { index: bracket.visibility === 'public' && ['active','completed'].includes(bracket.status), follow: bracket.visibility === 'public' } };
 }
 export default function Page(props: PageProps<'/bracket/[id]'>) {
-  return <main id="main-content" className="page-shell"><Suspense fallback={<p role="status">Loading the competition…</p>}><CompetitionPage {...props} /></Suspense></main>;
+  return <main id="main-content" className="page-shell bracket-page-shell"><Suspense fallback={<p role="status">Loading the competition…</p>}><CompetitionPage {...props} /></Suspense></main>;
 }
 async function CompetitionPage({ params }: PageProps<'/bracket/[id]'>) {
   const bracket = await readCompetition((await params).id);

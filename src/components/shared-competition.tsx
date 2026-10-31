@@ -3,7 +3,7 @@ import { useMemo, useState, useTransition } from 'react';
 import { useCompetitionStatus } from '@/lib/use-competition-status';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import BracketDemo from '@/components/bracket-demo';
+import BracketDemo, { type FinalVoteTotals } from '@/components/bracket-demo';
 import type { Competition, CompetitionCommand } from '@/lib/competition';
 import { initialBracket, roundNames, type BracketAction } from '@/lib/bracket';
 import { categoryName } from '@/lib/bracket-categories';
@@ -25,6 +25,18 @@ export default function SharedCompetition({ bracket: initialSnapshot, signedIn }
     }
     return value;
   }, [bracket.currentRound, bracket.matchups, competitors]);
+  const finalVotes = useMemo(() => {
+    const totals: FinalVoteTotals = {};
+    const closedRounds = new Set(bracket.rounds.filter(round => round.status === 'closed').map(round => round.index));
+    for (const matchup of bracket.matchups) {
+      if (!closedRounds.has(matchup.round) || !matchup.winnerId) continue;
+      const votes: Record<string, number> = {};
+      if (matchup.leftId && matchup.leftVotes !== null && Number.isSafeInteger(matchup.leftVotes) && matchup.leftVotes >= 0) votes[matchup.leftId] = matchup.leftVotes;
+      if (matchup.rightId && matchup.rightVotes !== null && Number.isSafeInteger(matchup.rightVotes) && matchup.rightVotes >= 0) votes[matchup.rightId] = matchup.rightVotes;
+      totals[`${matchup.round}-${matchup.position}`] = votes;
+    }
+    return totals;
+  }, [bracket.rounds, bracket.matchups]);
   const [closing, setClosing] = useState(false);
   function command(value: CompetitionCommand) {
     setError('');
@@ -67,7 +79,7 @@ export default function SharedCompetition({ bracket: initialSnapshot, signedIn }
         category={categoryName(bracket.category)} visibility={bracket.visibility}
         schedule={bracket.timingMode === 'manual' ? { mode: 'manual' } : { mode: bracket.timingMode, startsAt: bracket.startedAt!, roundEndsAt: bracket.rounds.map(r => r.endsAt!), ...(bracket.durationBased ? { roundMinutes: bracket.rounds.map(r => r.durationMinutes!) } : {}) }}
         results={!!finished.length && <details className="competition-results"><summary>Completed-round results</summary><ul>{finished.map(m => <li key={m.id}><strong>{names[m.round]}</strong><span>{entrantName(m.leftId)}: {m.leftVotes} · {entrantName(m.rightId)}: {m.rightVotes}</span><span>Winner: {entrantName(m.winnerId)}{m.resolution === 'random_tie' ? ' · Random tie-break' : m.resolution === 'seed' ? ' · No votes: higher seed' : m.resolution === 'bye' ? ' · Bye' : ''}</span></li>)}</ul></details>}
-        controlled={{ state, dispatch, pending, closing, pollError: liveStatus.error, clockOffset: liveStatus.clockOffset, onRetry: () => router.refresh(), canEndRound: bracket.isOwner && bracket.timingMode === 'manual' && bracket.status === 'active', votingEnabled: signedIn && bracket.status === 'active' }} />
+        controlled={{ state, dispatch, pending, closing, pollError: liveStatus.error, clockOffset: liveStatus.clockOffset, finalVotes, canEndRound: bracket.isOwner && bracket.timingMode === 'manual' && bracket.status === 'active', votingEnabled: signedIn && bracket.status === 'active' }} />
 
     </>}
     {bracket.isOwner && <details className="competition-delete"><summary>Delete this bracket</summary><p>This permanently removes its competitors, votes, results, invitations, and activity. People who saved it will see that it was deleted.</p><button type="button" className="primary-button" disabled={pending} onClick={() => command({ kind: 'delete' })}>Delete bracket permanently</button></details>}

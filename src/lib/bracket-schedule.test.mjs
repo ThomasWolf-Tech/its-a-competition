@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createSchedule, scheduleError, scheduleRoundCount, customProgressId, localDateTime } from './bracket-schedule.ts';
+import { durationTiming, createSchedule, scheduleError, scheduleRoundCount, customProgressId, localDateTime } from './bracket-schedule.ts';
 import { parseConfig } from './bracket-config.ts';
 
 const now = Date.parse('2026-10-27T12:00:00Z');
@@ -75,4 +75,12 @@ test('duration creation rejects zero, fractional, oversized, and missing rounds'
   for (const roundMinutes of [[0],[-1],[1.5],[44640],[],[NaN]]) assert.throws(() => createSchedule('public', { mode:'per-round',endDate:'',roundEndsAt:[],roundMinutes },2,now));
   const schedule = createSchedule('public',{mode:'per-round',endDate:'',roundEndsAt:[],roundMinutes:[44639]},2,now);
   assert.equal(Date.parse(schedule.roundEndsAt[0])-now,44639*60000);
+});
+
+test('new round timing starts at zero and saved durations are preserved', () => {
+  const now = Date.parse('2030-01-01T00:00:00Z');
+  const empty = { mode: '', endDate: '', roundEndsAt: [] };
+  assert.deepEqual(durationTiming(empty, now).roundMinutes, [0, 0, 0, 0, 0]);
+  assert.deepEqual(durationTiming({ ...empty, mode: 'per-round', roundMinutes: [1, 60, 1440, 0, 0], customize: true }, now).roundMinutes, [1, 60, 1440, 0, 0]);
+  assert.equal(durationTiming({ ...empty, mode: 'per-round', roundHours: ['2'] }, now).roundMinutes[0], 120);
 });

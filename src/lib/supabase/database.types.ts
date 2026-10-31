@@ -299,6 +299,9 @@ isOneToOne: false
               "first_earned_at": string,"last_earned_at": string,"quantity": number,"trophy_id": string
             }[]
                            },
+"get_voting_brackets":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
 "reactivate_account":
 { Args: Record<PropertyKey, never>; Returns: undefined
                            },

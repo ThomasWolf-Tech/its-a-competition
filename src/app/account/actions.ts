@@ -48,16 +48,25 @@ export async function removeSavedBracket(_previous: { error: string }, formData:
 }
 
 export async function deleteDraftBracket(_previous: { error: string }, formData: FormData): Promise<{ error: string }> {
+  return deleteOwnedBracket(formData, 'draft');
+}
+
+export async function deleteCompletedBracket(_previous: { error: string }, formData: FormData): Promise<{ error: string }> {
+  return deleteOwnedBracket(formData, 'completed');
+}
+
+async function deleteOwnedBracket(formData: FormData, status: 'draft' | 'completed'): Promise<{ error: string }> {
+  const item = status === 'draft' ? 'draft' : 'completed bracket';
   const id = formData.get('id');
-  if (typeof id !== 'string' || !UUID.test(id) || formData.get('confirm') !== 'yes') return { error: 'Confirm that you want to permanently delete this draft.' };
+  if (typeof id !== 'string' || !UUID.test(id) || formData.get('confirm') !== 'yes') return { error: `Confirm that you want to permanently delete this ${item}.` };
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
-  if (authError || !user) return { error: 'Sign in again to delete your draft.' };
-  const { data: draft, error: readError } = await supabase.from('brackets').select('status').eq('id', id).eq('owner_id', user.id).maybeSingle();
-  if (readError) return { error: 'We couldn’t check this draft. Please try again.' };
-  if (!draft || draft.status !== 'draft') return { error: 'This draft is no longer available. Refresh your brackets before continuing.' };
+  if (authError || !user) return { error: `Sign in again to delete your ${item}.` };
+  const { data: bracket, error: readError } = await supabase.from('brackets').select('status').eq('id', id).eq('owner_id', user.id).maybeSingle();
+  if (readError) return { error: `We couldn’t check this ${item}. Please try again.` };
+  if (!bracket || bracket.status !== status) return { error: `This ${item} is no longer available. Refresh your brackets before continuing.` };
   const { error } = await supabase.rpc('delete_competition', { p_id: id });
-  if (error) return { error: 'We couldn’t delete your draft. Please try again.' };
+  if (error) return { error: `We couldn’t delete your ${item}. Please try again.` };
   revalidatePath(`/create`);
   revalidatePath(`/bracket/${id}`);
   revalidatePath('/account/brackets');
